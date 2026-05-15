@@ -1,0 +1,10 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "TJ East LLC",
+  "check_number": "33445",
+  "payment_date": "2026-05-13",
+  "total_amount": 2800.00,
+  "remittance_lines": [
+    {"invoice_number": "INV-2026-0090", "line_amount": 2800.00, "description": "specialty organic mix - payer name differs from invoice"}
+  ]
+}

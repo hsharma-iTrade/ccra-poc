@@ -1,0 +1,10 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "Restaurant Depot - Boston",
+  "check_number": "55891",
+  "payment_date": "2026-05-13",
+  "total_amount": 2150.00,
+  "remittance_lines": [
+    {"invoice_number": "INV-2026-0050", "line_amount": 2150.00, "description": "produce + dry goods"}
+  ]
+}

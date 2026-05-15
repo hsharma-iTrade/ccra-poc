@@ -1,0 +1,11 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "Performance Food Group",
+  "check_number": "91234",
+  "payment_date": "2026-05-14",
+  "total_amount": 12930.00,
+  "remittance_lines": [
+    {"invoice_number": "INV-2026-0060", "line_amount": 7250.00, "description": "bulk produce - distribution"},
+    {"invoice_number": "INV-2026-0061", "line_amount": 5680.00, "description": "weekly bulk"}
+  ]
+}

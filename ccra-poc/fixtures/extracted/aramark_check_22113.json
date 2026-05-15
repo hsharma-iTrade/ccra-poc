@@ -1,0 +1,10 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "Aramark Corporate Dining",
+  "check_number": "22113",
+  "payment_date": "2026-05-14",
+  "total_amount": 3200.00,
+  "remittance_lines": [
+    {"invoice_number": "INV-2026-0070", "line_amount": 3200.00, "description": "corporate dining produce - short by $125"}
+  ]
+}

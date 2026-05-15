@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import streamlit; print\\('streamlit', streamlit.__version__\\)\")",
+      "Bash(curl -sf -o /dev/null -w \"Homepage HTTP: %{http_code}\\\\nResponse time: %{time_total}s\\\\n\" http://localhost:8501/)",
+      "Bash(curl -sf -o /dev/null -w \"Healthz HTTP: %{http_code}\\\\n\" http://localhost:8501/_stcore/health)",
+      "Bash(lsof -nP -iTCP:8501 -sTCP:LISTEN)"
+    ]
+  }
+}

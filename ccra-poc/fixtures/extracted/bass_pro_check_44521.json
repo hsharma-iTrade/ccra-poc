@@ -1,0 +1,11 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "Bass Pro Foods",
+  "check_number": "44521",
+  "payment_date": "2026-05-12",
+  "total_amount": 2125.50,
+  "remittance_lines": [
+    {"invoice_number": "INV-2026-0001", "line_amount": 1250.00, "description": "produce - lettuce, tomatoes"},
+    {"invoice_number": "INV-2026-0002", "line_amount": 875.50, "description": "produce - broccoli, carrots"}
+  ]
+}

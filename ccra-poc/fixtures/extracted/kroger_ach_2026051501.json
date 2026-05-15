@@ -1,0 +1,10 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "Kroger Central",
+  "check_number": "ACH-20260515-01",
+  "payment_date": "2026-05-15",
+  "total_amount": 5400.00,
+  "remittance_lines": [
+    {"invoice_number": "INV-2026-0010", "line_amount": 5400.00, "description": "weekly produce delivery"}
+  ]
+}

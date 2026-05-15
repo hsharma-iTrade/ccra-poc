@@ -1,0 +1,10 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "Compass Group North America",
+  "check_number": "44778",
+  "payment_date": "2026-05-14",
+  "total_amount": 4900.00,
+  "remittance_lines": [
+    {"invoice_number": "INV-2026-0080", "line_amount": 4900.00, "description": "institutional produce"}
+  ]
+}

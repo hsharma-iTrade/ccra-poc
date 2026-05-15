@@ -1,0 +1,12 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "Sysco Mid-Atlantic",
+  "check_number": "77234",
+  "payment_date": "2026-05-14",
+  "total_amount": 19450.00,
+  "remittance_lines": [
+    {"invoice_number": "INV-2026-0030", "line_amount": 8500.00, "description": "bulk produce - restaurant grade"},
+    {"invoice_number": "INV-2026-0031", "line_amount": 6200.00, "description": "bulk produce weekly"},
+    {"invoice_number": "INV-2026-0032", "line_amount": 4750.00, "description": "weekend special - short by varying claim"}
+  ]
+}

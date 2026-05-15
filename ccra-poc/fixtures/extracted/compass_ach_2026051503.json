@@ -1,0 +1,10 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "Compass Group North America",
+  "check_number": "ACH-20260515-03",
+  "payment_date": "2026-05-15",
+  "total_amount": 3100.00,
+  "remittance_lines": [
+    {"invoice_number": "INV-2026-0081", "line_amount": 3100.00, "description": "invoice already paid - duplicate"}
+  ]
+}

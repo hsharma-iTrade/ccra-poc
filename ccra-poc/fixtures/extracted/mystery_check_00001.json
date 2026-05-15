@@ -1,0 +1,10 @@
+{
+  "extraction_status": "EXTRACTED",
+  "payer_name": "Mystery Sender LLC",
+  "check_number": "00001",
+  "payment_date": "2026-05-14",
+  "total_amount": 1500.00,
+  "remittance_lines": [
+    {"invoice_number": "INV-9999-9999", "line_amount": 1500.00, "description": "unknown invoice reference"}
+  ]
+}

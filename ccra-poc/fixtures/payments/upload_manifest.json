@@ -1,0 +1,23 @@
+[
+  {
+    "fixture_id": "UPLOAD-001",
+    "filename": "kroger_check_88991.pdf",
+    "display_label": "Kroger Central - Check #88991 (PDF)",
+    "preview_snippet": "Scanned check image, $3,200.00 - INV-2026-0011",
+    "scenario_note": "Clean MATCH on upload"
+  },
+  {
+    "fixture_id": "UPLOAD-002",
+    "filename": "aramark_check_22113.jpg",
+    "display_label": "Aramark Corporate Dining - Check #22113 (JPG)",
+    "preview_snippet": "Camera-captured check, $3,200.00 - INV-2026-0070",
+    "scenario_note": "UNDERPAID by $125 on INV-2026-0070"
+  },
+  {
+    "fixture_id": "UPLOAD-003",
+    "filename": "compass_check_44778.pdf",
+    "display_label": "Compass Group - Check #44778 (PDF)",
+    "preview_snippet": "Check #44778 $4,900.00 - INV-2026-0080",
+    "scenario_note": "Clean MATCH on upload"
+  }
+]

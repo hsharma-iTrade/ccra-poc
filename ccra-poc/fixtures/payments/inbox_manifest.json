@@ -1,0 +1,102 @@
+[
+  {
+    "fixture_id": "INBOX-001",
+    "source_channel": "EMAIL",
+    "received_at": "2026-05-15T08:12:00",
+    "subject": "Remittance Advice - Bass Pro Foods Check #44521",
+    "from_email": "ap@basspro-foods.example.com",
+    "artifact_ref": "bass_pro_check_44521.pdf",
+    "preview_snippet": "Please find attached our payment for outstanding invoices. Total: $2,125.50",
+    "scenario_note": "Clean MATCH - two invoices fully paid"
+  },
+  {
+    "fixture_id": "INBOX-002",
+    "source_channel": "ACH_EMAIL",
+    "received_at": "2026-05-15T08:24:00",
+    "subject": "ACH Payment Notification - Kroger Central",
+    "from_email": "vendor.payments@kroger-central.example.com",
+    "artifact_ref": "kroger_ach_2026051501.pdf",
+    "preview_snippet": "ACH credit of $5,400.00 reference INV-2026-0010",
+    "scenario_note": "Clean MATCH - single invoice ACH"
+  },
+  {
+    "fixture_id": "INBOX-003",
+    "source_channel": "LOCKBOX_EMAIL",
+    "received_at": "2026-05-15T08:31:00",
+    "subject": "Lockbox Scan - Whole Foods Market",
+    "from_email": "lockbox@bank.example.com",
+    "artifact_ref": "wholefoods_lockbox_scan.pdf",
+    "preview_snippet": "Lockbox scan, check #88102 from Whole Foods, $4,200.75",
+    "scenario_note": "UNDERPAID - short by $50 on INV-2026-0020"
+  },
+  {
+    "fixture_id": "INBOX-004",
+    "source_channel": "EMAIL",
+    "received_at": "2026-05-15T08:45:00",
+    "subject": "Payment Remittance - Sysco Mid-Atlantic",
+    "from_email": "accounts.payable@sysco-midatl.example.com",
+    "artifact_ref": "sysco_check_77234.pdf",
+    "preview_snippet": "Check #77234 for $19,450.00 covering 3 invoices",
+    "scenario_note": "MULTI-INVOICE check - 2 MATCH + 1 UNDERPAID"
+  },
+  {
+    "fixture_id": "INBOX-005",
+    "source_channel": "ACH_EMAIL",
+    "received_at": "2026-05-15T09:02:00",
+    "subject": "ACH Remittance - US Foods Northeast",
+    "from_email": "ap.northeast@usfoods.example.com",
+    "artifact_ref": "usfoods_ach_2026051502.pdf",
+    "preview_snippet": "ACH credit $3,900.00 ref INV-2026-0040",
+    "scenario_note": "OVERPAID by $100 on INV-2026-0040"
+  },
+  {
+    "fixture_id": "INBOX-006",
+    "source_channel": "EMAIL",
+    "received_at": "2026-05-15T09:18:00",
+    "subject": "Payment Notification - Restaurant Depot Boston",
+    "from_email": "boston.ap@restaurantdepot.example.com",
+    "artifact_ref": "restaurant_depot_check_55891.pdf",
+    "preview_snippet": "Check #55891 $2,150.00 - INV-2026-0050",
+    "scenario_note": "Clean MATCH"
+  },
+  {
+    "fixture_id": "INBOX-007",
+    "source_channel": "EMAIL",
+    "received_at": "2026-05-15T09:34:00",
+    "subject": "Remittance - Performance Food Group",
+    "from_email": "vendor.relations@pfg.example.com",
+    "artifact_ref": "pfg_check_91234.pdf",
+    "preview_snippet": "Check #91234 $12,930.00 - 2 invoices",
+    "scenario_note": "MULTI-INVOICE check - both MATCHED"
+  },
+  {
+    "fixture_id": "INBOX-008",
+    "source_channel": "EMAIL",
+    "received_at": "2026-05-15T09:52:00",
+    "subject": "Payment - Unknown Sender",
+    "from_email": "unknown@example.com",
+    "artifact_ref": "mystery_check_00001.pdf",
+    "preview_snippet": "Check for INV-9999-9999 amount $1,500.00",
+    "scenario_note": "UNMATCHED - invoice number does not exist"
+  },
+  {
+    "fixture_id": "INBOX-009",
+    "source_channel": "ACH_EMAIL",
+    "received_at": "2026-05-15T10:08:00",
+    "subject": "ACH Notification - Compass Group",
+    "from_email": "ap.na@compass-group.example.com",
+    "artifact_ref": "compass_ach_2026051503.pdf",
+    "preview_snippet": "ACH credit $3,100.00 ref INV-2026-0081",
+    "scenario_note": "DUPLICATE - invoice already fully paid"
+  },
+  {
+    "fixture_id": "INBOX-010",
+    "source_channel": "EMAIL",
+    "received_at": "2026-05-15T10:22:00",
+    "subject": "Payment - Trader Joe's",
+    "from_email": "ap.east@traderjoes.example.com",
+    "artifact_ref": "traderjoes_check_33445.pdf",
+    "preview_snippet": "Check #33445 $2,800.00 - INV-2026-0090",
+    "scenario_note": "PAYER_MISMATCH warning + MATCHED amount (payer field shows wrong name)"
+  }
+]
