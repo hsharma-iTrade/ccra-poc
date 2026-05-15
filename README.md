@@ -30,7 +30,7 @@ Accounts-receivable teams receive checks and ACH remittances from lockboxes, for
 
 ## Live demo
 
-👉 **[Try it on Streamlit Cloud](https://itn-ccra-poc.streamlit.app)** _(replace with your deployed URL)_
+👉 **[Try it on Streamlit Cloud](https://itrade-ccra-demo.streamlit.app/)** _(replace with your deployed URL)_
 
 **Demo flow (60 seconds):**
 
