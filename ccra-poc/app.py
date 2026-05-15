@@ -12,6 +12,7 @@ headlines.
 
 from __future__ import annotations
 
+import base64
 import random
 import re
 import uuid
@@ -52,6 +53,14 @@ OMS_GOLD = "#F1AA48"       # OMS swirl icon
 # Page chrome
 BG_PAGE = "#FFFFFF"        # main content surface (was CREAM)
 BG_SUBTLE = "#FAFAFA"      # table headers, hover states
+# Maps invoice numbers to source-artifact PDF files (relative to ccra-poc/).
+# When a drilldown opens a Payment whose remittance lines include any of these
+# invoices, the "Source artifact preview" pane renders the mapped PDF inline.
+INVOICE_PDF_MAP = {
+    "INV-2026-0020": "fixtures/artifacts/pdf/remittance_check_sample.pdf",
+    "INV-2026-0040": "fixtures/artifacts/pdf/ach_remittance_advice_us_foods.pdf",
+}
+
 BORDER_LIGHT = "#EFEFEF"   # 1px row + section dividers
 BORDER_MED = "#D5D5D5"     # button/input borders
 TEXT_PRIMARY = "#1E1E1E"
@@ -1261,19 +1270,44 @@ def render_drilldown():
 
     with right:
         st.markdown("<h4 class='ccra-serif'>Source artifact preview</h4>", unsafe_allow_html=True)
-        artifact_path = (
-            Path(__file__).resolve().parent
-            / "fixtures"
-            / "artifacts"
-            / payment["artifact_ref"]
-        )
-        if artifact_path.exists():
-            if artifact_path.suffix.lower() in {".jpg", ".jpeg", ".png"}:
-                st.image(str(artifact_path), use_container_width=True)
-            else:
-                st.info(f"Artifact at: `{artifact_path.name}`")
-        fixture_meta = payment.get("fixture_meta", {})
-        preview = f"""[POC artifact preview - text rendering of pre-extracted data]
+
+        # Look for a mapped PDF on any remittance line for this payment.
+        app_root = Path(__file__).resolve().parent
+        mapped_pdf_path = None
+        for _line in payment.get("remittance_lines", []):
+            _inv = _line.get("invoice_number", "")
+            if _inv in INVOICE_PDF_MAP:
+                candidate = app_root / INVOICE_PDF_MAP[_inv]
+                if candidate.exists():
+                    mapped_pdf_path = candidate
+                    break
+
+        if mapped_pdf_path is not None:
+            st.markdown(
+                f"<div style='color:{TEXT_MUTED};font-size:12px;margin-bottom:6px;'>"
+                f"📄 Source artifact — {mapped_pdf_path.name}</div>",
+                unsafe_allow_html=True,
+            )
+            try:
+                st.pdf(str(mapped_pdf_path))
+            except AttributeError:
+                pdf_b64 = base64.b64encode(mapped_pdf_path.read_bytes()).decode()
+                st.markdown(
+                    f'<iframe src="data:application/pdf;base64,{pdf_b64}" '
+                    f'width="100%" height="600px" '
+                    f'style="border:1px solid #EFEFEF; border-radius:6px;"></iframe>',
+                    unsafe_allow_html=True,
+                )
+        else:
+            artifact_path = app_root / "fixtures" / "artifacts" / payment["artifact_ref"]
+            if artifact_path.exists():
+                if artifact_path.suffix.lower() in {".jpg", ".jpeg", ".png"}:
+                    st.image(str(artifact_path), use_container_width=True)
+                else:
+                    st.info(f"Artifact at: `{artifact_path.name}`")
+        if mapped_pdf_path is None:
+            fixture_meta = payment.get("fixture_meta", {})
+            preview = f"""[POC artifact preview - text rendering of pre-extracted data]
 
 Source file: {payment['artifact_ref']}
 Channel:     {payment['source_channel']}
@@ -1286,16 +1320,16 @@ TOTAL:   ${float(payment['total_amount']):,.2f}
 
 REMITTANCE LINES:
 """
-        for line in payment["remittance_lines"]:
-            preview += (
-                f"  - {line.get('invoice_number',''):20s}  "
-                f"${float(line.get('line_amount',0)):>12,.2f}  "
-                f"{line.get('description','')}\n"
+            for line in payment["remittance_lines"]:
+                preview += (
+                    f"  - {line.get('invoice_number',''):20s}  "
+                    f"${float(line.get('line_amount',0)):>12,.2f}  "
+                    f"{line.get('description','')}\n"
+                )
+            st.markdown(
+                f"<div class='artifact-preview'>{preview}</div>",
+                unsafe_allow_html=True,
             )
-        st.markdown(
-            f"<div class='artifact-preview'>{preview}</div>",
-            unsafe_allow_html=True,
-        )
 
     if st.session_state.show_draft:
         render_email_draft(payment)
