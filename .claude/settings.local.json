@@ -30,7 +30,17 @@
       "Bash(lsof -i :8501 -sTCP:LISTEN -t)",
       "Bash(curl -s http://localhost:8501/ -o /tmp/st_index.html)",
       "Bash(nohup ./.venv/bin/streamlit run app.py --server.headless true --server.port 8501)",
-      "Bash(echo \"NEW_PID=$!\")"
+      "Bash(echo \"NEW_PID=$!\")",
+      "Bash(nohup python -m streamlit run app.py --server.port 8501 --server.headless true)",
+      "Bash(echo \"spawned PID=$!\")",
+      "Bash(curl -sf http://localhost:8501/_stcore/health)",
+      "Bash(lsof -ti:8501)",
+      "Bash(curl -s -o /dev/null -w \"/ -> %{http_code}\\\\n\" http://localhost:8501/)",
+      "Bash(curl -s -o /dev/null -w \"/_stcore/health -> %{http_code}\\\\n\" http://localhost:8501/_stcore/health)",
+      "Bash(echo \"PID=$\\(lsof -ti:8501)",
+      "Bash(disown)",
+      "Bash(echo \"PID on 8501 = $\\(lsof -ti:8501)",
+      "Bash(nohup ./.venv/bin/streamlit run app.py --server.port 8501 --server.headless true)"
     ]
   }
 }
