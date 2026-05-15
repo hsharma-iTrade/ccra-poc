@@ -1,0 +1,29 @@
+# Harvey AI SDLC — internal pipeline state (not part of the product)
+.claude/
+.harvey-context.json
+.harvey-state.json
+.harvey-logs/
+**/.harvey-logs/
+
+# Python build / virtualenv artifacts
+.venv/
+**/.venv/
+venv/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local environment
+.env
+.env.*
+.streamlit/secrets.toml
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
