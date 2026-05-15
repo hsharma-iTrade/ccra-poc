@@ -1288,16 +1288,13 @@ def render_drilldown():
                 f"📄 Source artifact — {mapped_pdf_path.name}</div>",
                 unsafe_allow_html=True,
             )
-            try:
-                st.pdf(str(mapped_pdf_path))
-            except AttributeError:
-                pdf_b64 = base64.b64encode(mapped_pdf_path.read_bytes()).decode()
-                st.markdown(
-                    f'<iframe src="data:application/pdf;base64,{pdf_b64}" '
-                    f'width="100%" height="600px" '
-                    f'style="border:1px solid #EFEFEF; border-radius:6px;"></iframe>',
-                    unsafe_allow_html=True,
-                )
+            pdf_b64 = base64.b64encode(mapped_pdf_path.read_bytes()).decode()
+            st.markdown(
+                f'<iframe src="data:application/pdf;base64,{pdf_b64}" '
+                f'width="100%" height="600px" '
+                f'style="border:1px solid #EFEFEF; border-radius:6px;"></iframe>',
+                unsafe_allow_html=True,
+            )
         else:
             artifact_path = app_root / "fixtures" / "artifacts" / payment["artifact_ref"]
             if artifact_path.exists():

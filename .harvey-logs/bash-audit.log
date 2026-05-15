@@ -2388,3 +2388,205 @@ EOF
 2026-05-15T20:29:43Z [86a83c57] grep "\"agentType\":\"harvey-plan\"" "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl" | wc -l
 2026-05-15T20:29:45Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
 2026-05-15T20:29:45Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:29:46Z [86a83c57] ls /Users/hsharma/projects/hackathon/*.md 2>/dev/null || echo "No .md files in root"
+2026-05-15T20:29:46Z [86a83c57] ls /Users/hsharma/projects/hackathon/*.md 2>/dev/null || echo "No .md files in root"
+2026-05-15T20:33:46Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/ && ls /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/ 2>&1 | head -20
+2026-05-15T20:33:46Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/ && ls /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/ 2>&1 | head -20
+2026-05-15T20:33:47Z [86a83c57] grep -n "Source artifact preview\|artifact_preview\|artifact_text\|render_drilldown" /Users/hsharma/projects/hackathon/ccra-poc/app.py 2>/dev/null | head -30
+2026-05-15T20:33:47Z [86a83c57] grep -n "Source artifact preview\|artifact_preview\|artifact_text\|render_drilldown" /Users/hsharma/projects/hackathon/ccra-poc/app.py 2>/dev/null | head -30
+2026-05-15T20:33:53Z [86a83c57] mkdir -p /Users/hsharma/projects/hackathon/ccra-poc/fixtures/artifacts/pdf/ && cp /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/remittance_check_sample.pdf /Users/hsharma/projects/hackathon/ccra-poc/fixtures/artifacts/pdf/ && cp /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/ach_remittance_advice_us_foods.pdf /Users/hsharma/projects/hackathon/ccra-poc/fixtures/artifacts/pdf/ && ls -la /Users/hsharma/projects/hackathon/ccra-poc/fixtures/artifacts/pdf/
+2026-05-15T20:33:53Z [86a83c57] mkdir -p /Users/hsharma/projects/hackathon/ccra-poc/fixtures/artifacts/pdf/ && cp /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/remittance_check_sample.pdf /Users/hsharma/projects/hackathon/ccra-poc/fixtures/artifacts/pdf/ && cp /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/ach_remittance_advice_us_foods.pdf /Users/hsharma/projects/hackathon/ccra-poc/fixtures/artifacts/pdf/ && ls -la /Users/hsharma/projects/hackathon/ccra-poc/fixtures/artifacts/pdf/
+2026-05-15T20:33:57Z [86a83c57] grep -n "^import\|^from" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -20
+2026-05-15T20:33:57Z [86a83c57] grep -n "^import\|^from" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -20
+2026-05-15T20:34:04Z [86a83c57] ps -p 9654 -o command= 2>/dev/null && which python3 && find /Users/hsharma/projects/hackathon -name "streamlit" -type f 2>/dev/null | head -5
+2026-05-15T20:34:04Z [86a83c57] ps -p 9654 -o command= 2>/dev/null && which python3 && find /Users/hsharma/projects/hackathon -name "streamlit" -type f 2>/dev/null | head -5
+2026-05-15T20:34:10Z [86a83c57] /Users/hsharma/projects/hackathon/ccra-poc/.venv/bin/python -c "import streamlit; print(streamlit.__version__); print('has st.pdf:', hasattr(__import__('streamlit'), 'pdf'))"
+2026-05-15T20:34:10Z [86a83c57] /Users/hsharma/projects/hackathon/ccra-poc/.venv/bin/python -c "import streamlit; print(streamlit.__version__); print('has st.pdf:', hasattr(__import__('streamlit'), 'pdf'))"
+2026-05-15T20:34:14Z [86a83c57] grep -n "^import base64\|^import\|^TEXT_PRIMARY\|^BORDER_LIGHT" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -20
+2026-05-15T20:34:14Z [86a83c57] grep -n "^import base64\|^import\|^TEXT_PRIMARY\|^BORDER_LIGHT" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -20
+2026-05-15T20:34:57Z [86a83c57] /Users/hsharma/projects/hackathon/ccra-poc/.venv/bin/python -c "import ast; ast.parse(open('/Users/hsharma/projects/hackathon/ccra-poc/app.py').read()); print('OK')"
+2026-05-15T20:34:57Z [86a83c57] /Users/hsharma/projects/hackathon/ccra-poc/.venv/bin/python -c "import ast; ast.parse(open('/Users/hsharma/projects/hackathon/ccra-poc/app.py').read()); print('OK')"
+2026-05-15T20:35:02Z [86a83c57] kill 9654 2>/dev/null; sleep 2; lsof -ti:8501 | xargs -r kill -9 2>/dev/null; sleep 1; lsof -i:8501 || echo "Port 8501 free"
+2026-05-15T20:35:02Z [86a83c57] kill 9654 2>/dev/null; sleep 2; lsof -ti:8501 | xargs -r kill -9 2>/dev/null; sleep 1; lsof -i:8501 || echo "Port 8501 free"
+2026-05-15T20:35:14Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup ./.venv/bin/streamlit run app.py --server.port 8501 --server.headless true > /tmp/streamlit.log 2>&1 &
+echo "STARTED_PID=$!"
+sleep 5
+echo "--- log tail ---"
+tail -20 /tmp/streamlit.log
+echo "--- port check ---"
+lsof -i:8501 -sTCP:LISTEN | head -5
+2026-05-15T20:35:14Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup ./.venv/bin/streamlit run app.py --server.port 8501 --server.headless true > /tmp/streamlit.log 2>&1 &
+echo "STARTED_PID=$!"
+sleep 5
+echo "--- log tail ---"
+tail -20 /tmp/streamlit.log
+echo "--- port check ---"
+lsof -i:8501 -sTCP:LISTEN | head -5
+2026-05-15T20:35:20Z [86a83c57] echo "--- health ---"
+curl -sf -o /dev/null -w "health: HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "--- root ---"
+curl -sf -o /dev/null -w "root:   HTTP %{http_code}\n" http://localhost:8501/
+echo "--- pgrep ---"
+pgrep -af "streamlit run app.py" | head -3
+2026-05-15T20:35:20Z [86a83c57] echo "--- health ---"
+curl -sf -o /dev/null -w "health: HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "--- root ---"
+curl -sf -o /dev/null -w "root:   HTTP %{http_code}\n" http://localhost:8501/
+echo "--- pgrep ---"
+pgrep -af "streamlit run app.py" | head -3
+2026-05-15T20:35:38Z [86a83c57] grep -n "^def \|^class " /Users/hsharma/projects/hackathon/ccra-poc/src/data_loader.py | head -20
+2026-05-15T20:35:38Z [86a83c57] grep -n "^def \|^class " /Users/hsharma/projects/hackathon/ccra-poc/src/data_loader.py | head -20
+2026-05-15T20:35:53Z [86a83c57] /Users/hsharma/projects/hackathon/ccra-poc/.venv/bin/python << 'PYEOF'
+"""Programmatic check: simulate render_drilldown's PDF-lookup logic against real fixtures."""
+import sys
+from pathlib import Path
+
+ROOT = Path("/Users/hsharma/projects/hackathon/ccra-poc")
+sys.path.insert(0, str(ROOT))
+
+INVOICE_PDF_MAP = {
+    "INV-2026-0020": "fixtures/artifacts/pdf/remittance_check_sample.pdf",
+    "INV-2026-0040": "fixtures/artifacts/pdf/ach_remittance_advice_us_foods.pdf",
+}
+
+print("== PDF files on disk ==")
+for inv, rel in INVOICE_PDF_MAP.items():
+    p = ROOT / rel
+    print(f"  {inv} -> {rel} :: exists={p.exists()} size={p.stat().st_size if p.exists() else 0} bytes")
+
+# Replicate the renderer's lookup: scan every extracted artifact for these invoices
+from src.data_loader import load_inbox_manifest, load_upload_manifest, load_extracted
+
+print("\n== Scanning extracted artifacts for target invoices ==")
+target = {"INV-2026-0020", "INV-2026-0040"}
+hits = {inv: [] for inv in target}
+all_manifests = load_inbox_manifest() + load_upload_manifest()
+for m in all_manifests:
+    ref = m.get("artifact_ref", "")
+    try:
+        ext = load_extracted(ref)
+    except Exception:
+        continue
+    invs_on_artifact = []
+    for line in ext.get("remittance_lines", []):
+        inv = line.get("invoice_number", "")
+        invs_on_artifact.append(inv)
+        if inv in target:
+            hits[inv].append({
+                "artifact_ref": ref,
+                "payer": ext.get("payer_name"),
+                "check": ext.get("check_number"),
+                "source": m.get("source_channel"),
+                "all_invs_on_artifact": None,  # filled below
+            })
+    for h in hits.values():
+        for item in h:
+            if item["artifact_ref"] == ref and item["all_invs_on_artifact"] is None:
+                item["all_invs_on_artifact"] = invs_on_artifact
+
+for inv, h_list in hits.items():
+    print(f"\n  {inv}: {len(h_list)} matching artifact(s)")
+    for h in h_list:
+        pdf = ROOT / INVOICE_PDF_MAP[inv]
+        print(f"    - artifact_ref={h['artifact_ref']}")
+        print(f"      payer={h['payer']} check={h['check']} source={h['source']}")
+        print(f"      invoices on artifact: {h['all_invs_on_artifact']}")
+        print(f"      => will render PDF: {pdf.name} (exists={pdf.exists()})")
+
+print("\n== Verdict ==")
+all_ok = all(len(h_list) >= 1 for h_list in hits.values()) and \
+         all((ROOT / v).exists() for v in INVOICE_PDF_MAP.values())
+print("ALL PASS" if all_ok else "FAIL: missing fixture or PDF")
+PYEOF
+2026-05-15T20:35:53Z [86a83c57] /Users/hsharma/projects/hackathon/ccra-poc/.venv/bin/python << 'PYEOF'
+"""Programmatic check: simulate render_drilldown's PDF-lookup logic against real fixtures."""
+import sys
+from pathlib import Path
+
+ROOT = Path("/Users/hsharma/projects/hackathon/ccra-poc")
+sys.path.insert(0, str(ROOT))
+
+INVOICE_PDF_MAP = {
+    "INV-2026-0020": "fixtures/artifacts/pdf/remittance_check_sample.pdf",
+    "INV-2026-0040": "fixtures/artifacts/pdf/ach_remittance_advice_us_foods.pdf",
+}
+
+print("== PDF files on disk ==")
+for inv, rel in INVOICE_PDF_MAP.items():
+    p = ROOT / rel
+    print(f"  {inv} -> {rel} :: exists={p.exists()} size={p.stat().st_size if p.exists() else 0} bytes")
+
+# Replicate the renderer's lookup: scan every extracted artifact for these invoices
+from src.data_loader import load_inbox_manifest, load_upload_manifest, load_extracted
+
+print("\n== Scanning extracted artifacts for target invoices ==")
+target = {"INV-2026-0020", "INV-2026-0040"}
+hits = {inv: [] for inv in target}
+all_manifests = load_inbox_manifest() + load_upload_manifest()
+for m in all_manifests:
+    ref = m.get("artifact_ref", "")
+    try:
+        ext = load_extracted(ref)
+    except Exception:
+        continue
+    invs_on_artifact = []
+    for line in ext.get("remittance_lines", []):
+        inv = line.get("invoice_number", "")
+        invs_on_artifact.append(inv)
+        if inv in target:
+            hits[inv].append({
+                "artifact_ref": ref,
+                "payer": ext.get("payer_name"),
+                "check": ext.get("check_number"),
+                "source": m.get("source_channel"),
+                "all_invs_on_artifact": None,  # filled below
+            })
+    for h in hits.values():
+        for item in h:
+            if item["artifact_ref"] == ref and item["all_invs_on_artifact"] is None:
+                item["all_invs_on_artifact"] = invs_on_artifact
+
+for inv, h_list in hits.items():
+    print(f"\n  {inv}: {len(h_list)} matching artifact(s)")
+    for h in h_list:
+        pdf = ROOT / INVOICE_PDF_MAP[inv]
+        print(f"    - artifact_ref={h['artifact_ref']}")
+        print(f"      payer={h['payer']} check={h['check']} source={h['source']}")
+        print(f"      invoices on artifact: {h['all_invs_on_artifact']}")
+        print(f"      => will render PDF: {pdf.name} (exists={pdf.exists()})")
+
+print("\n== Verdict ==")
+all_ok = all(len(h_list) >= 1 for h_list in hits.values()) and \
+         all((ROOT / v).exists() for v in INVOICE_PDF_MAP.values())
+print("ALL PASS" if all_ok else "FAIL: missing fixture or PDF")
+PYEOF
+2026-05-15T20:36:11Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -name "development-plan.md" 2>/dev/null | head -20
+2026-05-15T20:36:11Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -name "development-plan.md" 2>/dev/null | head -20
+2026-05-15T20:36:28Z [86a83c57] git add ccra-poc/app.py ccra-poc/fixtures/artifacts/pdf/ && git commit -m "$(cat <<'EOF'
+Wire two sample PDFs into drilldown Source artifact preview
+
+- Add INVOICE_PDF_MAP: INV-2026-0020 → remittance_check_sample.pdf,
+  INV-2026-0040 → ach_remittance_advice_us_foods.pdf
+- Copy PDFs from ui_inspiration/ into fixtures/artifacts/pdf/ so they
+  ship to Streamlit Cloud
+- Use st.pdf with base64 iframe fallback; show caption above embed
+- Falls back to existing text/image preview for rows without a mapped PDF
+
+Co-authored-by: iTN Harvey <harvey@itradenetwork.com>
+EOF
+)" 2>&1 | tail -6
+2026-05-15T20:36:28Z [86a83c57] git add ccra-poc/app.py ccra-poc/fixtures/artifacts/pdf/ && git commit -m "$(cat <<'EOF'
+Wire two sample PDFs into drilldown Source artifact preview
+
+- Add INVOICE_PDF_MAP: INV-2026-0020 → remittance_check_sample.pdf,
+  INV-2026-0040 → ach_remittance_advice_us_foods.pdf
+- Copy PDFs from ui_inspiration/ into fixtures/artifacts/pdf/ so they
+  ship to Streamlit Cloud
+- Use st.pdf with base64 iframe fallback; show caption above embed
+- Falls back to existing text/image preview for rows without a mapped PDF
+
+Co-authored-by: iTN Harvey <harvey@itradenetwork.com>
+EOF
+)" 2>&1 | tail -6
+2026-05-15T20:36:32Z [86a83c57] git log --oneline -3
+2026-05-15T20:36:32Z [86a83c57] git log --oneline -3
