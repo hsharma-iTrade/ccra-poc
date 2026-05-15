@@ -1,184 +1,224 @@
-# CCRA POC - Cash Collection Reconciliation Assistant
-
-A 1-hour hackathon Proof-of-Concept that ingests payment artifacts (forwarded remittance emails, uploaded check images/PDFs), auto-matches them against a seeded invoice ledger, and surfaces an **Exceptions Dashboard** so AR clerks can focus only on the ~20% of payments that need a follow-up call.
-
-Source of truth: [`docs/refined-prd.md`](../docs/refined-prd.md).
+<div align="center">
+  <img src="assets/oms-icon.svg" width="48" alt="CCRA logo" />
+  <h1>CCRA — Cash Collection Reconciliation Assistant</h1>
+  <p><strong>Open-source AR exception triage tool built with Python + Streamlit</strong></p>
+  <p>
+    <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-blue?style=flat-square" />
+    <img alt="Streamlit" src="https://img.shields.io/badge/Streamlit-1.32%2B-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" />
+    <img alt="License MIT" src="https://img.shields.io/badge/license-MIT-green?style=flat-square" />
+    <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square" />
+  </p>
+</div>
 
 ---
 
-## What the demo proves
+## What is CCRA?
 
-> "100 checks came in today - which 20 need my attention, and exactly which customer + invoice + amount for each?"
+Accounts-receivable teams receive checks and ACH remittances from lockboxes, forwarded emails, and scanned paper mail. Today, clerks manually cross-reference every payment against an invoice ledger — a tedious process where most payments are fine and only a small fraction need attention.
 
-The POC answers that question in under 30 seconds for a curated fixture batch of 13 payments against a 22-invoice ledger.
+**CCRA automates the triage:**
 
-The Critical Path Journey:
+- Ingest payment fixtures (simulated email forwards, file uploads, camera captures)
+- Auto-match each remittance line against an invoice ledger (exact-cents matching)
+- Surface a clean exceptions dashboard: **Matched / Underpaid / Overpaid / Unmatched**
+- Drill into any exception: see the source artifact (PDF), payment context, and a pre-drafted internal escalation email addressed to the account manager who owns that customer
 
-> **Inbox -> Use sample data -> Dashboard tiles -> click a tile -> click a row -> drill-down -> Draft follow-up -> Copy to clipboard**
+> **Built as a 1-hour hackathon POC.** Not production-hardened, but intentionally structured so production-grade components (real OCR, live IMAP ingestion, ERP integration) can be dropped in module by module.
 
-All four classifications (`MATCHED`, `UNDERPAID`, `OVERPAID`, `UNMATCHED`) and both independent flags (`DUPLICATE`, `PAYER_MISMATCH`) appear in the fixture set, including at least one multi-invoice check.
+---
+
+## Live demo
+
+👉 **[Try it on Streamlit Cloud](https://itn-ccra-poc.streamlit.app)** _(replace with your deployed URL)_
+
+**Demo flow (60 seconds):**
+
+1. **Inbox** → click **"Use sample data"** — ingests 13 pre-extracted payment fixtures
+2. **Dashboard** → tiles update: Matched 12 / Underpaid 2 / Overpaid 2 / Unmatched 1
+3. Click the **Underpaid** tab → filtered row list
+4. Click **Open** on any row → drilldown: payment context + source PDF + remittance lines
+5. Click **Draft account-manager escalation** → internal email pre-composed, copy to clipboard
+
+---
+
+## Architecture
+
+```
+ccra-poc/
+├── app.py                      # Streamlit entry — all UI pages + routing
+├── requirements.txt
+├── runtime.txt                 # pins Python 3.10 for Streamlit Cloud
+├── assets/
+│   └── oms-icon.svg            # brand icon
+├── fixtures/
+│   ├── invoices/
+│   │   ├── invoices.json       # 22-invoice seed ledger across 10 customers
+│   │   └── customers.json      # customer → account manager mapping
+│   ├── payments/
+│   │   ├── inbox_manifest.json # 10 "forwarded email" fixture references
+│   │   └── upload_manifest.json# 3 "uploaded file" fixture references
+│   ├── extracted/              # pre-extracted JSON files (one per payment fixture)
+│   └── artifacts/
+│       └── pdf/                # source PDFs wired to specific invoices
+└── src/
+    ├── data_loader.py          # loads + caches fixture JSON
+    ├── matching_engine.py      # pure function: (payments, invoices) → match results
+    └── email_drafter.py        # classification-keyed internal escalation templates
+```
+
+### Core modules
+
+| Module | Responsibility |
+|--------|---------------|
+| `src/matching_engine.py` | Deterministic exact-cents classifier. Pure function — no Streamlit dependencies. Easy to unit test and swap for a fuzzy/tolerance-based matcher. |
+| `src/data_loader.py` | Loads invoices, customers, and fixture manifests. Replace with ERP API calls here. |
+| `src/email_drafter.py` | Produces a draft internal escalation per classification. Swap templates or plug in an LLM here. |
+| `app.py` | All UI: brand strip, inbox, dashboard with tab-strip filter, drilldown, email panel. One file for hackathon speed — split into `ui/` modules for production. |
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Python 3.10+
+- No database, no API keys, no external services required
+
+### Run locally
+
+```bash
+# 1. Clone
+git clone https://github.com/hsharma-iTrade/ccra-poc.git
+cd ccra-poc
+
+# 2. Create virtual environment
+python3 -m venv .venv
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
+
+# 3. Install dependencies (just two)
+pip install -r requirements.txt
+
+# 4. Run
+streamlit run app.py
+# → open http://localhost:8501
+```
+
+### Stop the server
+
+```bash
+# Option A — Ctrl+C in the terminal where Streamlit is running
+
+# Option B — kill by port (if running in background)
+kill $(lsof -ti :8501)          # macOS / Linux
+# Windows: netstat -ano | findstr :8501 → taskkill /PID <pid> /F
+```
+
+---
+
+## Deploy to Streamlit Cloud (free, 5 minutes)
+
+1. Fork this repo on GitHub
+2. Visit [share.streamlit.io](https://share.streamlit.io) → **New app**
+3. Pick your fork, branch `main`, main file `app.py`
+4. Click **Deploy** — first build takes ~2 min
+5. Share the public URL with your team or customers
+
+No secrets or environment variables needed for the POC fixture mode.
+
+---
+
+## Adding your own fixtures
+
+All fixture data lives in `fixtures/`. No code changes required to add payments.
+
+### Add a new payment fixture
+
+1. Create a JSON file in `fixtures/extracted/` following this schema:
+
+```json
+{
+  "fixture_id": "email_my_customer_20260601",
+  "display_label": "My Customer Co — ACH 2026-06-01",
+  "source_channel": "ACH_EMAIL",
+  "payer_name": "My Customer Co",
+  "check_number": "ACH-20260601-01",
+  "payment_date": "2026-06-01",
+  "total_amount": 5000.00,
+  "remittance_lines": [
+    { "invoice_number": "INV-2026-0001", "line_amount": 3000.00 },
+    { "invoice_number": "INV-2026-0002", "line_amount": 2000.00 }
+  ],
+  "artifact_ref": "email_my_customer_20260601.txt",
+  "scenario_note": "Multi-invoice ACH — fully matched"
+}
+```
+
+2. Add an entry to `fixtures/payments/inbox_manifest.json` (or `upload_manifest.json`)
+3. The matching engine will auto-classify against `fixtures/invoices/invoices.json`
+
+### Add a source PDF
+
+Map an invoice number to a PDF so the drilldown shows the real document:
+
+```python
+# In app.py, find INVOICE_PDF_MAP and add:
+INVOICE_PDF_MAP = {
+    "INV-2026-0020": "fixtures/artifacts/pdf/remittance_check_sample.pdf",
+    "INV-YOUR-INV":  "fixtures/artifacts/pdf/your_check.pdf",   # ← add here
+}
+```
+
+---
+
+## Roadmap / good first issues
+
+Contributions welcome — especially from developers who want to see this become a real product.
+
+| # | Feature | Effort | Notes |
+|---|---------|--------|-------|
+| 🟢 | **Add more fixture scenarios** | XS | Multi-invoice partial pay, foreign currency, duplicate ACH |
+| 🟢 | **Unit tests for matching engine** | S | `src/matching_engine.py` is a pure function — easy to cover |
+| 🟡 | **Tolerance-based matching** | S | Match within ±$0.01 for rounding differences; configurable threshold |
+| 🟡 | **Real IMAP ingestion** (Gmail / Outlook) | M | `imaplib` + App Password; poll on button click |
+| 🟡 | **OCR extraction** (AWS Textract / Google Document AI) | M | Replace pre-extracted JSON with real PDF → JSON pipeline |
+| 🟡 | **Export exceptions to CSV** | S | `st.download_button` on the dashboard |
+| 🔴 | **ERP integration** (NetSuite / QuickBooks API) | L | Replace `fixtures/invoices/` with live API calls in `src/data_loader.py` |
+| 🔴 | **Multi-tenant auth** | L | Streamlit + Auth0 / Supabase |
+| 🔴 | **Webhook inbound email** (AWS SES / SendGrid) | L | Real-time push instead of poll |
+
+---
+
+## Contributing
+
+1. Fork the repo
+2. Create a feature branch: `git checkout -b feature/my-change`
+3. Make your changes + add tests if touching `src/`
+4. Open a pull request — describe what you changed and why
+5. No CLA, no contributor agreement — just MIT
+
+**Code style:** `black` + `ruff` (not enforced by CI yet — PRs to add that welcome!)
 
 ---
 
 ## Tech stack
 
-- **Python 3.10+** (any 3.10 / 3.11 / 3.12 / 3.13 works locally; Streamlit Community Cloud uses 3.10 per `runtime.txt`)
-- **Streamlit** - single-page reactive UI
-- **pandas** - tabular row list + filtering
-- **decimal.Decimal** - exact-cents arithmetic (per PRD Q3)
-
-No databases, no external services, no auth. Everything is fixture-driven and deterministic.
-
----
-
-## Project structure
-
-```
-ccra-poc/
-├── app.py                                # Streamlit entry point - run this
-├── requirements.txt                      # Python dependencies
-├── runtime.txt                           # Python version pin (Streamlit Cloud)
-├── README.md                             # this file
-├── .gitignore
-├── src/
-│   ├── __init__.py
-│   ├── data_loader.py                    # fixture loaders + lookup builders
-│   ├── matching_engine.py                # exact-cents classification logic
-│   └── email_drafter.py                  # template-based follow-up drafter
-└── fixtures/
-    ├── invoices/
-    │   ├── invoices.json                 # 22 seeded invoices, 10 customers
-    │   └── customers.json                # customer reference + contact emails
-    ├── payments/
-    │   ├── inbox_manifest.json           # 10 forwarded-email fixtures
-    │   └── upload_manifest.json          # 3 file-upload fixtures
-    ├── extracted/                        # pre-extracted JSON per artifact (Q1)
-    │   ├── bass_pro_check_44521.json
-    │   ├── kroger_ach_2026051501.json
-    │   └── ... (13 total, one per fixture)
-    └── artifacts/                        # optional: drop real PDFs/images here
-        └── README.txt
-```
+| Layer | Choice | Why |
+|-------|--------|-----|
+| UI | [Streamlit](https://streamlit.io) 1.32+ | Fastest path from Python logic to interactive web UI |
+| Matching engine | Pure Python + `decimal` | Exact-cents arithmetic; zero external dependencies |
+| Data | JSON flat files | No DB setup — easy to fork and run locally |
+| Deploy | Streamlit Community Cloud | Free tier, GitHub-connected, no config |
 
 ---
 
-## Run locally
+## License
 
-### 1. One-time setup
-
-```bash
-cd ccra-poc
-python3 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-### 2. Launch the app
-
-```bash
-streamlit run app.py
-```
-
-Streamlit will open a browser to `http://localhost:8501` (or the next free port; the terminal output is authoritative).
-
-### 3. Demo walkthrough (Critical Path)
-
-1. App opens on the **Inbox** page showing 10 forwarded emails on the left and 3 sample uploads on the right.
-2. Click **"Use sample data"** to ingest all 13 fixtures in one click (recommended for the demo).
-3. The app jumps to the **Dashboard** showing four count tiles (Matched / Underpaid / Overpaid / Unmatched).
-4. Click any tile to filter the row list below.
-5. Click **Open** on any row to expand the drill-down panel with full Payment context + remittance lines + artifact preview.
-6. Click **Draft follow-up** on an exception row to open the pre-composed email panel.
-7. Click **Copy to clipboard** to copy the email body (browser confirms with a toast).
+MIT — do whatever you want with it. A star ⭐ is appreciated if you find it useful.
 
 ---
 
-## Demo fixture scenario coverage
+## Background
 
-| Fixture                              | Classification mix                                      |
-| ------------------------------------ | ------------------------------------------------------- |
-| INBOX-001 (Bass Pro Foods)           | 2 MATCHED (multi-invoice)                               |
-| INBOX-002 (Kroger ACH)               | 1 MATCHED                                               |
-| INBOX-003 (Whole Foods lockbox)      | 1 UNDERPAID (-$50)                                      |
-| INBOX-004 (Sysco - multi)            | 3-line check: 2 MATCHED + 1 (delta varies per ledger)   |
-| INBOX-005 (US Foods ACH)             | 1 OVERPAID (+$100)                                      |
-| INBOX-006 (Restaurant Depot)         | 1 MATCHED                                               |
-| INBOX-007 (PFG - multi)              | 2 MATCHED (multi-invoice)                               |
-| INBOX-008 (Mystery sender)           | 1 UNMATCHED                                             |
-| INBOX-009 (Compass ACH)              | 1 OVERPAID + DUPLICATE (invoice already paid)           |
-| INBOX-010 (TJ East LLC)              | 1 MATCHED + PAYER_MISMATCH (payer name differs)         |
-| UPLOAD-001 (Kroger upload)           | 1 MATCHED                                               |
-| UPLOAD-002 (Aramark upload)          | 1 UNDERPAID (-$125)                                     |
-| UPLOAD-003 (Compass upload)          | 1 MATCHED                                               |
+Built as a hackathon POC at [iTradeNetwork](https://www.itradenetwork.com) to demonstrate the AR reconciliation use case for fresh produce supply chains. The matching engine and exception-triage pattern are domain-agnostic — applicable to any business that receives payments against invoices.
 
-Every classification and flag appears at least once; INBOX-001, INBOX-004, and INBOX-007 are multi-invoice checks (PRD Q7).
-
----
-
-## Determinism
-
-Per PRD §12: the same fixtures + the same invoice ledger always produce byte-identical match results. There are no clocks read at match time, no random ids in the matching engine, no order-dependent lookups. You can run the demo end-to-end repeatedly without drift.
-
----
-
-## Deploy to Streamlit Community Cloud (public URL)
-
-Streamlit Community Cloud gives you a free public URL so the customer can view the demo on their laptop without any local install.
-
-### Step 1 - Push the repo to GitHub
-
-```bash
-cd ccra-poc           # or the parent workspace, depending on how you want
-                      # the repo to look on GitHub
-git init
-git add .
-git commit -m "Initial CCRA POC scaffold"
-git branch -M main
-
-# Create an empty repo on github.com first (e.g. ccra-poc), then:
-git remote add origin https://github.com/<your-username>/ccra-poc.git
-git push -u origin main
-```
-
-### Step 2 - Connect the repo at share.streamlit.io
-
-1. Open [https://share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
-2. Click **"New app"**.
-3. Pick the repository (`<your-username>/ccra-poc`), branch `main`.
-4. **Main file path:** `app.py`
-5. **Python version:** Streamlit Cloud reads `runtime.txt` and uses **Python 3.10**. No manual selection needed.
-6. Click **Deploy**.
-
-### Step 3 - Share the public URL
-
-Streamlit auto-assigns a URL like `https://<your-username>-ccra-poc-app-xxxxx.streamlit.app`. Send that link to the customer - the demo runs entirely in their browser, no install required.
-
-### Notes
-
-- Fixture data is committed to the repo, so the deployed app uses the exact same demo set as the local run. Determinism holds.
-- The first deploy can take 2-3 minutes (Streamlit Cloud builds the venv). Subsequent rebuilds on `git push` are faster.
-- `requirements.txt` is the only dependency manifest Streamlit Cloud reads. Keep it minimal.
-
----
-
-## Out of scope (per PRD §7)
-
-- Live OCR pipeline (pre-extracted JSON only, per Q1)
-- Real ERP write-back
-- Multi-tenant auth / SSO
-- Outbound email send (clipboard only, per Q6)
-- Production extraction accuracy
-- Configurable match tolerance (exact-cents only, per Q3)
-- Procurement-partner multi-source invoice ingestion (deferred to Phase 2)
-
----
-
-## Troubleshooting
-
-| Symptom                                              | Fix                                                                                   |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `ModuleNotFoundError: No module named 'streamlit'`   | Activate the venv (`source .venv/bin/activate`) and re-run `pip install -r requirements.txt` |
-| Port 8501 already in use                             | Streamlit will pick the next free port; check the terminal for the actual URL         |
-| `FileNotFoundError: Required fixture missing`        | You moved or deleted a fixture file; restore from git                                 |
-| Clipboard button blocked by browser                  | Use the Body textarea (it's editable + selectable) as the fallback per PRD §11        |
-| Streamlit Cloud build fails on Python 3.10           | Verify `runtime.txt` contains exactly `python-3.10` (one line, no trailing whitespace) |
+Product requirements: [`docs/refined-prd.md`](../docs/refined-prd.md)
