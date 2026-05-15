@@ -941,17 +941,34 @@ def render_inbox():
                     "2. Take photo of check / remittance</div>",
                     unsafe_allow_html=True,
                 )
-                cam_file = st.camera_input(
-                    "Take photo of check / remittance",
-                    label_visibility="collapsed",
-                    key="upload_camera",
-                    help="Opens your device camera (rear camera on mobile).",
-                )
-                if cam_file is not None and getattr(cam_file, "file_id", None) != st.session_state.last_processed_camera_id:
-                    synth_name = f"camera_capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-                    _register_user_upload(synth_name, "camera", getattr(cam_file, "size", 0) or 0)
-                    st.session_state.last_processed_camera_id = getattr(cam_file, "file_id", synth_name)
-                    st.rerun()
+                # Gate the camera widget behind a session-state flag so the
+                # browser does NOT request camera permission until the user
+                # actively clicks "Open camera". st.camera_input mounts a
+                # getUserMedia call as soon as it renders.
+                if not st.session_state.get("camera_active", False):
+                    if st.button(
+                        "📷 Open camera",
+                        key="open_camera_btn",
+                        help="Click to enable your camera. Browser will then ask for permission.",
+                    ):
+                        st.session_state.camera_active = True
+                        st.rerun()
+                else:
+                    cam_file = st.camera_input(
+                        "Take photo of check / remittance",
+                        label_visibility="collapsed",
+                        key="upload_camera",
+                        help="Opens your device camera (rear camera on mobile).",
+                    )
+                    if cam_file is not None and getattr(cam_file, "file_id", None) != st.session_state.last_processed_camera_id:
+                        synth_name = f"camera_capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                        _register_user_upload(synth_name, "camera", getattr(cam_file, "size", 0) or 0)
+                        st.session_state.last_processed_camera_id = getattr(cam_file, "file_id", synth_name)
+                        st.session_state.camera_active = False
+                        st.rerun()
+                    if st.button("Close camera", key="close_camera_btn"):
+                        st.session_state.camera_active = False
+                        st.rerun()
 
         st.caption("Pick from sample uploads below, or use the + button to add a PDF or photo.")
 
