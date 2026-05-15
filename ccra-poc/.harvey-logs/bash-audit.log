@@ -68,3 +68,147 @@ echo "NEW_PID=$NEW_PID"
 curl -s -o /dev/null -w "HTTP_/: %{http_code}\n" http://localhost:8501/
 curl -s -o /dev/null -w "HTTP_/_stcore/health: %{http_code}\n" http://localhost:8501/_stcore/health
 tail -5 /tmp/ccra_streamlit.log
+2026-05-15T20:41:53Z [86a83c57] grep -n "camera_input\|upload_camera\|Take photo" /Users/hsharma/projects/hackathon/ccra-poc/app.py
+2026-05-15T20:41:53Z [86a83c57] grep -n "camera_input\|upload_camera\|Take photo" /Users/hsharma/projects/hackathon/ccra-poc/app.py
+2026-05-15T20:42:14Z [86a83c57] python3 << 'PYEOF'
+p = 'app.py'
+s = open(p).read()
+
+old = '''                st.markdown(
+                    "<div style='height:8px;'></div>"
+                    f"<div style='color:{TEXT_PRIMARY};font-weight:600;font-size:13px;margin-bottom:2px;'>"
+                    "2. Take photo of check / remittance</div>",
+                    unsafe_allow_html=True,
+                )
+                cam_file = st.camera_input(
+                    "Take photo of check / remittance",
+                    label_visibility="collapsed",
+                    key="upload_camera",
+                    help="Opens your device camera (rear camera on mobile).",
+                )
+                if cam_file is not None and getattr(cam_file, "file_id", None) != st.session_state.last_processed_camera_id:
+                    synth_name = f"camera_capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                    _register_user_upload(synth_name, "camera", getattr(cam_file, "size", 0) or 0)
+                    st.session_state.last_processed_camera_id = getattr(cam_file, "file_id", synth_name)
+                    st.rerun()'''
+
+new = '''                st.markdown(
+                    "<div style='height:8px;'></div>"
+                    f"<div style='color:{TEXT_PRIMARY};font-weight:600;font-size:13px;margin-bottom:2px;'>"
+                    "2. Take photo of check / remittance</div>",
+                    unsafe_allow_html=True,
+                )
+                # Gate the camera widget behind a session-state flag so the
+                # browser does NOT request camera permission until the user
+                # actively clicks "Open camera". st.camera_input mounts a
+                # getUserMedia call as soon as it renders.
+                if not st.session_state.get("camera_active", False):
+                    if st.button(
+                        "\U0001F4F7 Open camera",
+                        key="open_camera_btn",
+                        help="Click to enable your camera. Browser will then ask for permission.",
+                    ):
+                        st.session_state.camera_active = True
+                        st.rerun()
+                else:
+                    cam_file = st.camera_input(
+                        "Take photo of check / remittance",
+                        label_visibility="collapsed",
+                        key="upload_camera",
+                        help="Opens your device camera (rear camera on mobile).",
+                    )
+                    if cam_file is not None and getattr(cam_file, "file_id", None) != st.session_state.last_processed_camera_id:
+                        synth_name = f"camera_capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                        _register_user_upload(synth_name, "camera", getattr(cam_file, "size", 0) or 0)
+                        st.session_state.last_processed_camera_id = getattr(cam_file, "file_id", synth_name)
+                        st.session_state.camera_active = False
+                        st.rerun()
+                    if st.button("Close camera", key="close_camera_btn"):
+                        st.session_state.camera_active = False
+                        st.rerun()'''
+
+if old in s:
+    open(p, 'w').write(s.replace(old, new))
+    print('OK: patched')
+else:
+    print('FAIL: pattern not found')
+PYEOF
+
+2026-05-15T20:42:14Z [86a83c57] python3 << 'PYEOF'
+p = 'app.py'
+s = open(p).read()
+
+old = '''                st.markdown(
+                    "<div style='height:8px;'></div>"
+                    f"<div style='color:{TEXT_PRIMARY};font-weight:600;font-size:13px;margin-bottom:2px;'>"
+                    "2. Take photo of check / remittance</div>",
+                    unsafe_allow_html=True,
+                )
+                cam_file = st.camera_input(
+                    "Take photo of check / remittance",
+                    label_visibility="collapsed",
+                    key="upload_camera",
+                    help="Opens your device camera (rear camera on mobile).",
+                )
+                if cam_file is not None and getattr(cam_file, "file_id", None) != st.session_state.last_processed_camera_id:
+                    synth_name = f"camera_capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                    _register_user_upload(synth_name, "camera", getattr(cam_file, "size", 0) or 0)
+                    st.session_state.last_processed_camera_id = getattr(cam_file, "file_id", synth_name)
+                    st.rerun()'''
+
+new = '''                st.markdown(
+                    "<div style='height:8px;'></div>"
+                    f"<div style='color:{TEXT_PRIMARY};font-weight:600;font-size:13px;margin-bottom:2px;'>"
+                    "2. Take photo of check / remittance</div>",
+                    unsafe_allow_html=True,
+                )
+                # Gate the camera widget behind a session-state flag so the
+                # browser does NOT request camera permission until the user
+                # actively clicks "Open camera". st.camera_input mounts a
+                # getUserMedia call as soon as it renders.
+                if not st.session_state.get("camera_active", False):
+                    if st.button(
+                        "\U0001F4F7 Open camera",
+                        key="open_camera_btn",
+                        help="Click to enable your camera. Browser will then ask for permission.",
+                    ):
+                        st.session_state.camera_active = True
+                        st.rerun()
+                else:
+                    cam_file = st.camera_input(
+                        "Take photo of check / remittance",
+                        label_visibility="collapsed",
+                        key="upload_camera",
+                        help="Opens your device camera (rear camera on mobile).",
+                    )
+                    if cam_file is not None and getattr(cam_file, "file_id", None) != st.session_state.last_processed_camera_id:
+                        synth_name = f"camera_capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                        _register_user_upload(synth_name, "camera", getattr(cam_file, "size", 0) or 0)
+                        st.session_state.last_processed_camera_id = getattr(cam_file, "file_id", synth_name)
+                        st.session_state.camera_active = False
+                        st.rerun()
+                    if st.button("Close camera", key="close_camera_btn"):
+                        st.session_state.camera_active = False
+                        st.rerun()'''
+
+if old in s:
+    open(p, 'w').write(s.replace(old, new))
+    print('OK: patched')
+else:
+    print('FAIL: pattern not found')
+PYEOF
+
+2026-05-15T20:42:27Z [86a83c57] python3 -c "import ast; ast.parse(open('app.py').read()); print('SYNTAX_OK')" && kill 12278 2>/dev/null; sleep 1; nohup ./.venv/bin/streamlit run app.py --server.port 8501 --server.headless true > /tmp/ccra_streamlit.log 2>&1 &
+sleep 4
+NEW_PID=$(lsof -ti :8501 | head -1)
+echo "NEW_PID=$NEW_PID"
+curl -s -o /dev/null -w "HTTP_/: %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "HTTP_/_stcore/health: %{http_code}\n" http://localhost:8501/_stcore/health
+tail -3 /tmp/ccra_streamlit.log
+2026-05-15T20:42:27Z [86a83c57] python3 -c "import ast; ast.parse(open('app.py').read()); print('SYNTAX_OK')" && kill 12278 2>/dev/null; sleep 1; nohup ./.venv/bin/streamlit run app.py --server.port 8501 --server.headless true > /tmp/ccra_streamlit.log 2>&1 &
+sleep 4
+NEW_PID=$(lsof -ti :8501 | head -1)
+echo "NEW_PID=$NEW_PID"
+curl -s -o /dev/null -w "HTTP_/: %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "HTTP_/_stcore/health: %{http_code}\n" http://localhost:8501/_stcore/health
+tail -3 /tmp/ccra_streamlit.log

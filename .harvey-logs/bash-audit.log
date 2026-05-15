@@ -2590,3 +2590,37 @@ EOF
 )" 2>&1 | tail -6
 2026-05-15T20:36:32Z [86a83c57] git log --oneline -3
 2026-05-15T20:36:32Z [86a83c57] git log --oneline -3
+2026-05-15T20:42:39Z [86a83c57] cd /Users/hsharma/projects/hackathon && git add ccra-poc/app.py && git commit -m "$(cat <<'EOF'
+Gate camera widget behind explicit user opt-in (no perm prompt on load)
+
+st.camera_input invokes navigator.mediaDevices.getUserMedia at mount,
+triggering the browser camera-permission dialog as soon as the popover
+exists in the DOM — including on page load.
+
+Wrap the widget in a session_state flag (`camera_active`). The popover
+now shows a "📷 Open camera" button instead. Only after the user clicks
+that button do we mount st.camera_input — at which point getUserMedia
+fires and the browser asks for permission. Adds a "Close camera" button
+to undo, and auto-collapses after a successful capture.
+
+Co-authored-by: iTN Harvey <harvey@itradenetwork.com>
+EOF
+)" 2>&1 | tail -3
+2026-05-15T20:42:39Z [86a83c57] cd /Users/hsharma/projects/hackathon && git add ccra-poc/app.py && git commit -m "$(cat <<'EOF'
+Gate camera widget behind explicit user opt-in (no perm prompt on load)
+
+st.camera_input invokes navigator.mediaDevices.getUserMedia at mount,
+triggering the browser camera-permission dialog as soon as the popover
+exists in the DOM — including on page load.
+
+Wrap the widget in a session_state flag (`camera_active`). The popover
+now shows a "📷 Open camera" button instead. Only after the user clicks
+that button do we mount st.camera_input — at which point getUserMedia
+fires and the browser asks for permission. Adds a "Close camera" button
+to undo, and auto-collapses after a successful capture.
+
+Co-authored-by: iTN Harvey <harvey@itradenetwork.com>
+EOF
+)" 2>&1 | tail -3
+2026-05-15T20:42:42Z [86a83c57] git log --oneline -5
+2026-05-15T20:42:42Z [86a83c57] git log --oneline -5
