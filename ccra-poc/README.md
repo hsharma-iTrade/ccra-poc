@@ -12,6 +12,7 @@
 
 ---
 
+
 ## What is CCRA?
 
 Accounts-receivable teams receive checks and ACH remittances from lockboxes, forwarded emails, and scanned paper mail. Today, clerks manually cross-reference every payment against an invoice ledger — a tedious process where most payments are fine and only a small fraction need attention.
