@@ -1139,9 +1139,9 @@ def render_dashboard():
                 cols = st.columns([2, 1.3, 1, 1, 1, 0.8, 1, 0.8])
                 cols[0].markdown(f"<div style='color:{TEXT_PRIMARY};font-weight:600;'>{row['customer']}</div>", unsafe_allow_html=True)
                 cols[1].markdown(f"`{row['invoice_number']}`")
-                cols[2].markdown(
-                    f"{'$' + format(row['invoiced'], ',.2f') if row['invoiced'] is not None else '—'}"
-                )
+                inv_val = row['invoiced']
+                inv_str = f"${inv_val:,.2f}" if pd.notna(inv_val) else "—"
+                cols[2].markdown(inv_str)
                 cols[3].markdown(f"${row['paid']:,.2f}")
                 delta = row["delta"]
                 if delta == 0:
