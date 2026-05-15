@@ -1032,3 +1032,1093 @@ for f in ['app.py', 'src/data_loader.py', 'src/matching_engine.py', 'src/email_d
 2026-05-15T19:15:02Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ccra-poc/ 2>/dev/null
 2026-05-15T19:15:11Z [86a83c57] ls -laR /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/ 2>/dev/null | head -60
 2026-05-15T19:15:11Z [86a83c57] ls -laR /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/ 2>/dev/null | head -60
+2026-05-15T19:16:16Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/fixtures/ && echo "---" && ls /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/
+2026-05-15T19:16:16Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/fixtures/ && echo "---" && ls /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/
+2026-05-15T19:16:19Z [86a83c57] find /Users/hsharma/projects/hackathon/ccra-poc/fixtures -name "customers.json" 2>/dev/null
+2026-05-15T19:16:19Z [86a83c57] find /Users/hsharma/projects/hackathon/ccra-poc/fixtures -name "customers.json" 2>/dev/null
+2026-05-15T19:20:33Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && python3 -c "import ast; ast.parse(open('app.py').read()); ast.parse(open('src/email_drafter.py').read()); import json; json.load(open('fixtures/invoices/customers.json')); print('OK syntax + JSON')"
+2026-05-15T19:20:33Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && python3 -c "import ast; ast.parse(open('app.py').read()); ast.parse(open('src/email_drafter.py').read()); import json; json.load(open('fixtures/invoices/customers.json')); print('OK syntax + JSON')"
+2026-05-15T19:20:38Z [86a83c57] ps -p 96878 -o pid,command 2>/dev/null && echo "---kill---" && kill 96878 2>&1; sleep 1; ps -p 96878 -o pid 2>/dev/null && echo "still alive — forcing" && kill -9 96878 2>/dev/null; sleep 1; lsof -i :8501 2>/dev/null | head -5
+2026-05-15T19:20:38Z [86a83c57] ps -p 96878 -o pid,command 2>/dev/null && echo "---kill---" && kill 96878 2>&1; sleep 1; ps -p 96878 -o pid 2>/dev/null && echo "still alive — forcing" && kill -9 96878 2>/dev/null; sleep 1; lsof -i :8501 2>/dev/null | head -5
+2026-05-15T19:21:52Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && .venv/bin/python -c "
+from src.email_drafter import draft_follow_up
+from decimal import Decimal
+d = draft_follow_up(
+    classification='UNDERPAID',
+    flags=[],
+    payer_name='Bass Pro Foods Corp',
+    invoice_number='INV-2025-0001',
+    invoiced_amount=Decimal('1250.00'),
+    paid_amount=Decimal('1200.00'),
+    delta_amount=Decimal('-50.00'),
+    check_number='10421',
+    customer_name='Bass Pro Foods',
+    account_manager_name='Sarah Chen',
+    account_manager_email='sarah.chen@itradenetwork.com',
+)
+print('TO:', d['to_name'], '<' + d['to'] + '>')
+print('SUBJECT:', d['subject'])
+print('---')
+print(d['body'])
+"
+
+2026-05-15T19:21:52Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && .venv/bin/python -c "
+from src.email_drafter import draft_follow_up
+from decimal import Decimal
+d = draft_follow_up(
+    classification='UNDERPAID',
+    flags=[],
+    payer_name='Bass Pro Foods Corp',
+    invoice_number='INV-2025-0001',
+    invoiced_amount=Decimal('1250.00'),
+    paid_amount=Decimal('1200.00'),
+    delta_amount=Decimal('-50.00'),
+    check_number='10421',
+    customer_name='Bass Pro Foods',
+    account_manager_name='Sarah Chen',
+    account_manager_email='sarah.chen@itradenetwork.com',
+)
+print('TO:', d['to_name'], '<' + d['to'] + '>')
+print('SUBJECT:', d['subject'])
+print('---')
+print(d['body'])
+"
+
+2026-05-15T19:24:05Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup .venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/ccra-streamlit.log 2>&1 &
+echo "Spawned PID: $!"
+sleep 4
+echo "---log tail---"
+tail -20 /tmp/ccra-streamlit.log
+echo "---port check---"
+lsof -i :8501 | head -5
+2026-05-15T19:24:05Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup .venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/ccra-streamlit.log 2>&1 &
+echo "Spawned PID: $!"
+sleep 4
+echo "---log tail---"
+tail -20 /tmp/ccra-streamlit.log
+echo "---port check---"
+lsof -i :8501 | head -5
+2026-05-15T19:25:35Z [86a83c57] echo "--- GET / ---"
+curl -s -o /dev/null -w "HTTP %{http_code}\n" http://localhost:8501/
+echo "--- GET /_stcore/health ---"
+curl -s -w "\nHTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "--- new PID ---"
+lsof -ti :8501 | head -1
+2026-05-15T19:25:35Z [86a83c57] echo "--- GET / ---"
+curl -s -o /dev/null -w "HTTP %{http_code}\n" http://localhost:8501/
+echo "--- GET /_stcore/health ---"
+curl -s -w "\nHTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "--- new PID ---"
+lsof -ti :8501 | head -1
+2026-05-15T19:26:07Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "development-plan.md" -type f
+2026-05-15T19:26:07Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "development-plan.md" -type f
+2026-05-15T19:26:09Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null | head -20
+2026-05-15T19:26:09Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null | head -20
+2026-05-15T19:26:15Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -type f -name "*.md" 2>/dev/null
+2026-05-15T19:26:15Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -type f -name "*.md" 2>/dev/null
+2026-05-15T19:29:08Z [86a83c57] ls -la
+2026-05-15T19:29:08Z [86a83c57] ls -la
+2026-05-15T19:29:11Z [86a83c57] ls -la ccra-poc/
+2026-05-15T19:29:11Z [86a83c57] ls -la ccra-poc/
+2026-05-15T19:29:14Z [86a83c57] grep -rn -i "ocean mist\|oceanmist\|built for" ccra-poc/ --include="*.py" --include="*.md" --include="*.json" 2>/dev/null | grep -v __pycache__ | grep -v .venv
+2026-05-15T19:29:14Z [86a83c57] grep -rn -i "ocean mist\|oceanmist\|built for" ccra-poc/ --include="*.py" --include="*.md" --include="*.json" 2>/dev/null | grep -v __pycache__ | grep -v .venv
+2026-05-15T19:29:18Z [86a83c57] grep -n "file_uploader\|st.file_uploader\|upload" ccra-poc/app.py | head -30
+2026-05-15T19:29:18Z [86a83c57] grep -n "file_uploader\|st.file_uploader\|upload" ccra-poc/app.py | head -30
+2026-05-15T19:29:31Z [86a83c57] grep -n -i "ocean mist\|oceanmist\|built for" ccra-poc/README.md 2>/dev/null
+2026-05-15T19:29:31Z [86a83c57] grep -n -i "ocean mist\|oceanmist\|built for" ccra-poc/README.md 2>/dev/null
+2026-05-15T19:30:23Z [86a83c57] grep -rn -i "ocean mist\|oceanmist\|built for" ccra-poc/ 2>/dev/null | grep -v __pycache__ | grep -v ".venv" | grep -v ".git" || echo "CLEAN: zero hits"
+2026-05-15T19:30:23Z [86a83c57] grep -rn -i "ocean mist\|oceanmist\|built for" ccra-poc/ 2>/dev/null | grep -v __pycache__ | grep -v ".venv" | grep -v ".git" || echo "CLEAN: zero hits"
+2026-05-15T19:30:44Z [86a83c57] python3 -c "import ast; ast.parse(open('ccra-poc/app.py').read()); print('SYNTAX OK')"
+2026-05-15T19:30:44Z [86a83c57] python3 -c "import ast; ast.parse(open('ccra-poc/app.py').read()); print('SYNTAX OK')"
+2026-05-15T19:30:47Z [86a83c57] ps -p 529 -o pid,command 2>/dev/null || echo "PID 529 not running"
+2026-05-15T19:30:47Z [86a83c57] ps -p 529 -o pid,command 2>/dev/null || echo "PID 529 not running"
+2026-05-15T19:31:54Z [86a83c57] kill 529 2>/dev/null; sleep 2; ps -p 529 2>/dev/null && echo "still running" || echo "PID 529 killed"
+2026-05-15T19:31:54Z [86a83c57] kill 529 2>/dev/null; sleep 2; ps -p 529 2>/dev/null && echo "still running" || echo "PID 529 killed"
+2026-05-15T19:32:06Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup .venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit_ccra.log 2>&1 &
+echo "spawned PID=$!"
+sleep 4
+echo "---log tail---"
+tail -20 /tmp/streamlit_ccra.log
+2026-05-15T19:32:06Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup .venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit_ccra.log 2>&1 &
+echo "spawned PID=$!"
+sleep 4
+echo "---log tail---"
+tail -20 /tmp/streamlit_ccra.log
+2026-05-15T19:32:14Z [86a83c57] curl -s -o /dev/null -w "GET / -> HTTP %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "GET /_stcore/health -> HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+curl -s http://localhost:8501/_stcore/health
+2026-05-15T19:32:14Z [86a83c57] curl -s -o /dev/null -w "GET / -> HTTP %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "GET /_stcore/health -> HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+curl -s http://localhost:8501/_stcore/health
+2026-05-15T19:32:14Z [86a83c57] pgrep -fl "streamlit run app.py" | head -3
+2026-05-15T19:32:14Z [86a83c57] pgrep -fl "streamlit run app.py" | head -3
+2026-05-15T19:32:30Z [86a83c57] pwd
+2026-05-15T19:32:30Z [86a83c57] pwd
+2026-05-15T19:32:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/.harvey-context.json 2>/dev/null && echo "EXISTS" || echo "NOT FOUND"
+2026-05-15T19:32:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/.harvey-context.json 2>/dev/null && echo "EXISTS" || echo "NOT FOUND"
+2026-05-15T19:32:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/development-plan.md 2>/dev/null && echo "EXISTS" || echo "NOT FOUND"
+2026-05-15T19:32:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/development-plan.md 2>/dev/null && echo "EXISTS" || echo "NOT FOUND"
+2026-05-15T19:32:36Z [86a83c57] find /Users/hsharma/projects/hackathon/docs -name "development-plan.md" -type f 2>/dev/null
+2026-05-15T19:32:36Z [86a83c57] find /Users/hsharma/projects/hackathon/docs -name "development-plan.md" -type f 2>/dev/null
+2026-05-15T19:32:36Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -type f 2>/dev/null
+2026-05-15T19:32:36Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -type f 2>/dev/null
+2026-05-15T19:32:39Z [86a83c57] tail -100 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a099a1feab100c27f.jsonl
+2026-05-15T19:32:39Z [86a83c57] tail -100 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a099a1feab100c27f.jsonl
+2026-05-15T19:32:41Z [86a83c57] wc -l /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a099a1feab100c27f.jsonl
+2026-05-15T19:32:41Z [86a83c57] wc -l /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a099a1feab100c27f.jsonl
+2026-05-15T19:32:42Z [86a83c57] tail -20 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a099a1feab100c27f.jsonl | head -c 3000
+2026-05-15T19:32:42Z [86a83c57] tail -20 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a099a1feab100c27f.jsonl | head -c 3000
+2026-05-15T19:36:36Z [86a83c57] ls -la
+2026-05-15T19:36:36Z [86a83c57] ls -la
+2026-05-15T19:36:38Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ccra-poc/
+2026-05-15T19:36:38Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ccra-poc/
+2026-05-15T19:36:42Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/fixtures/ /Users/hsharma/projects/hackathon/ccra-poc/src/
+2026-05-15T19:36:42Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/fixtures/ /Users/hsharma/projects/hackathon/ccra-poc/src/
+2026-05-15T19:36:45Z [86a83c57] grep -n "upload_manifest\|file_uploader\|popover\|File Upload\|fixtures" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -50
+2026-05-15T19:36:45Z [86a83c57] grep -n "upload_manifest\|file_uploader\|popover\|File Upload\|fixtures" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -50
+2026-05-15T19:37:03Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/fixtures/payments/ && cat /Users/hsharma/projects/hackathon/ccra-poc/fixtures/payments/upload_manifest.json 2>/dev/null | head -60
+2026-05-15T19:37:03Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/fixtures/payments/ && cat /Users/hsharma/projects/hackathon/ccra-poc/fixtures/payments/upload_manifest.json 2>/dev/null | head -60
+2026-05-15T19:37:09Z [86a83c57] ps -p 1601 -o pid,command 2>/dev/null && echo "---" && lsof -nP -i :8501 2>/dev/null | head -5
+2026-05-15T19:37:09Z [86a83c57] ps -p 1601 -o pid,command 2>/dev/null && echo "---" && lsof -nP -i :8501 2>/dev/null | head -5
+2026-05-15T19:38:49Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && .venv/bin/python -c "import ast; ast.parse(open('app.py').read()); print('OK')"
+2026-05-15T19:38:49Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && .venv/bin/python -c "import ast; ast.parse(open('app.py').read()); print('OK')"
+2026-05-15T19:38:56Z [86a83c57] kill 1601 2>/dev/null; sleep 1; lsof -nP -i :8501 2>/dev/null | head -3; echo "---killed---"
+2026-05-15T19:38:56Z [86a83c57] kill 1601 2>/dev/null; sleep 1; lsof -nP -i :8501 2>/dev/null | head -3; echo "---killed---"
+2026-05-15T19:39:10Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup .venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit_ccra.log 2>&1 &
+echo "spawned PID: $!"
+disown
+2026-05-15T19:39:10Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup .venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit_ccra.log 2>&1 &
+echo "spawned PID: $!"
+disown
+2026-05-15T19:39:18Z [86a83c57] until curl -sf http://localhost:8501/_stcore/health >/dev/null 2>&1; do sleep 1; done && echo "READY" && curl -sf -o /dev/null -w "GET /            -> HTTP %{http_code}\n" http://localhost:8501/ && curl -sf -w "GET /_stcore/health -> HTTP %{http_code}  body=" http://localhost:8501/_stcore/health && echo "" && echo "" && lsof -nP -i :8501 -sTCP:LISTEN 2>/dev/null
+2026-05-15T19:39:18Z [86a83c57] until curl -sf http://localhost:8501/_stcore/health >/dev/null 2>&1; do sleep 1; done && echo "READY" && curl -sf -o /dev/null -w "GET /            -> HTTP %{http_code}\n" http://localhost:8501/ && curl -sf -w "GET /_stcore/health -> HTTP %{http_code}  body=" http://localhost:8501/_stcore/health && echo "" && echo "" && lsof -nP -i :8501 -sTCP:LISTEN 2>/dev/null
+2026-05-15T19:43:30Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && .venv/bin/python - << 'PYEOF'
+"""
+Unit-level test of the new helpers without launching Streamlit's full runtime.
+We import app.py's helpers by monkey-patching st.session_state with a dict-like.
+"""
+import importlib, sys, types
+
+# Stub streamlit BEFORE importing app.py so module top-level side effects don't crash.
+class _SS(dict):
+    def __getattr__(self, k):
+        try: return self[k]
+        except KeyError: raise AttributeError(k)
+    def __setattr__(self, k, v):
+        self[k] = v
+
+class _StubMarkdownEtc:
+    def __getattr__(self, name):
+        def _fn(*a, **kw):
+            class _Ctx:
+                def __enter__(s): return s
+                def __exit__(s, *a): return False
+            return _Ctx()
+        return _fn
+
+st_stub = types.ModuleType("streamlit")
+st_stub.session_state = _SS()
+st_stub.cache_data = lambda fn=None, **kw: (fn if fn else (lambda f: f))
+st_stub.set_page_config = lambda **kw: None
+for nm in ("markdown","caption","button","columns","container","divider","metric",
+           "popover","file_uploader","camera_input","rerun","info","write","title",
+           "header","subheader","text","code","success","warning","error","tabs",
+           "selectbox","radio","number_input","text_input","text_area","dataframe",
+           "table","metric","progress","empty","sidebar","stop","plotly_chart",
+           "altair_chart","image","video","audio","balloons","snow","toast",
+           "expander","form","form_submit_button","download_button","spinner",
+           "set_option","cache_resource"):
+    setattr(st_stub, nm, _StubMarkdownEtc().__getattr__(nm))
+
+sys.modules["streamlit"] = st_stub
+
+# Stub pandas to avoid heavy import (app imports `pd` at top level).
+sys.modules.setdefault("pandas", types.ModuleType("pandas"))
+
+import app  # this runs top-level code
+
+# Verify session-state keys are seeded by _init_state.
+expected_keys = {"user_uploaded_artifacts", "last_processed_pdf_name",
+                 "last_processed_camera_id", "page", "payments",
+                 "ingested_fixture_ids", "selected_classification",
+                 "selected_payment_id", "selected_line_index", "show_draft"}
+missing = expected_keys - set(st_stub.session_state.keys())
+print(f"Missing state keys: {missing or 'NONE - all seeded'}")
+
+# Test _sanitize_filename
+print()
+print("=== _sanitize_filename ===")
+for raw, exp in [("hello.pdf","hello.pdf"),
+                 ("../../../etc/passwd","_.._.._etc_passwd"),
+                 ("a b c.pdf","a b c.pdf"),
+                 ("weird;rm -rf;.pdf","weird_rm -rf_.pdf"),
+                 ("",  "unnamed")]:
+    got = app._sanitize_filename(raw)
+    print(f"  {raw!r:40s} -> {got!r}")
+
+# Test _unique_filename (collisions)
+print()
+print("=== _unique_filename ===")
+st_stub.session_state.user_uploaded_artifacts = [
+    {"artifact_name": "x.pdf"}, {"artifact_name": "x (2).pdf"}
+]
+for nm in ["fresh.pdf", "x.pdf", "x (2).pdf", "y"]:
+    print(f"  {nm!r:20s} -> {app._unique_filename(nm)!r}")
+
+# Test _register_user_upload + FIFO cap
+print()
+print("=== _register_user_upload + FIFO cap ===")
+st_stub.session_state.user_uploaded_artifacts = []
+for i in range(25):
+    app._register_user_upload(f"file_{i}.pdf", "upload", 2048 + i * 10)
+arts = st_stub.session_state.user_uploaded_artifacts
+print(f"  Total after 25 uploads (cap=20): {len(arts)} -> {'PASS' if len(arts)==20 else 'FAIL'}")
+print(f"  Oldest kept: {arts[0]['artifact_name']}  (expect file_5.pdf): "
+      f"{'PASS' if arts[0]['artifact_name']=='file_5.pdf' else 'FAIL'}")
+print(f"  Newest:      {arts[-1]['artifact_name']} (expect file_24.pdf): "
+      f"{'PASS' if arts[-1]['artifact_name']=='file_24.pdf' else 'FAIL'}")
+
+# Test that camera filename pattern is right
+print()
+print("=== camera capture filename ===")
+from datetime import datetime
+sample = f"camera_capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+import re
+ok = re.fullmatch(r"camera_capture_\d{8}_\d{6}\.png", sample) is not None
+print(f"  {sample}: {'PASS' if ok else 'FAIL'}")
+
+# Test that ingest_user_upload picks a random fixture and marks ingested
+print()
+print("=== ingest_user_upload (no real OCR) ===")
+st_stub.session_state.user_uploaded_artifacts = []
+st_stub.session_state.payments = []
+st_stub.session_state.ingested_fixture_ids = set()
+app._register_user_upload("my_check.pdf", "upload", 12000)
+rec = st_stub.session_state.user_uploaded_artifacts[0]
+print(f"  Before ingest: ingested={rec['ingested']}")
+# Stub the inner ingest_fixture so we don't need full data pipeline
+captured = {}
+def fake_ingest(fixture, label):
+    captured["fixture_id"] = fixture["fixture_id"]
+    captured["filename"]   = fixture["filename"]
+    captured["label"]      = label
+app.ingest_fixture = fake_ingest
+app.ingest_user_upload(rec)
+print(f"  After ingest:  ingested={rec['ingested']}")
+print(f"  Captured fixture filename: {captured.get('filename')}")
+print(f"  Captured fixture_id starts with USERUP-: "
+      f"{'PASS' if captured.get('fixture_id','').startswith('USERUP-') else 'FAIL'}")
+print(f"  Source label was UPLOAD: {'PASS' if captured.get('label')=='UPLOAD' else 'FAIL'}")
+PYEOF
+2026-05-15T19:43:30Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && .venv/bin/python - << 'PYEOF'
+"""
+Unit-level test of the new helpers without launching Streamlit's full runtime.
+We import app.py's helpers by monkey-patching st.session_state with a dict-like.
+"""
+import importlib, sys, types
+
+# Stub streamlit BEFORE importing app.py so module top-level side effects don't crash.
+class _SS(dict):
+    def __getattr__(self, k):
+        try: return self[k]
+        except KeyError: raise AttributeError(k)
+    def __setattr__(self, k, v):
+        self[k] = v
+
+class _StubMarkdownEtc:
+    def __getattr__(self, name):
+        def _fn(*a, **kw):
+            class _Ctx:
+                def __enter__(s): return s
+                def __exit__(s, *a): return False
+            return _Ctx()
+        return _fn
+
+st_stub = types.ModuleType("streamlit")
+st_stub.session_state = _SS()
+st_stub.cache_data = lambda fn=None, **kw: (fn if fn else (lambda f: f))
+st_stub.set_page_config = lambda **kw: None
+for nm in ("markdown","caption","button","columns","container","divider","metric",
+           "popover","file_uploader","camera_input","rerun","info","write","title",
+           "header","subheader","text","code","success","warning","error","tabs",
+           "selectbox","radio","number_input","text_input","text_area","dataframe",
+           "table","metric","progress","empty","sidebar","stop","plotly_chart",
+           "altair_chart","image","video","audio","balloons","snow","toast",
+           "expander","form","form_submit_button","download_button","spinner",
+           "set_option","cache_resource"):
+    setattr(st_stub, nm, _StubMarkdownEtc().__getattr__(nm))
+
+sys.modules["streamlit"] = st_stub
+
+# Stub pandas to avoid heavy import (app imports `pd` at top level).
+sys.modules.setdefault("pandas", types.ModuleType("pandas"))
+
+import app  # this runs top-level code
+
+# Verify session-state keys are seeded by _init_state.
+expected_keys = {"user_uploaded_artifacts", "last_processed_pdf_name",
+                 "last_processed_camera_id", "page", "payments",
+                 "ingested_fixture_ids", "selected_classification",
+                 "selected_payment_id", "selected_line_index", "show_draft"}
+missing = expected_keys - set(st_stub.session_state.keys())
+print(f"Missing state keys: {missing or 'NONE - all seeded'}")
+
+# Test _sanitize_filename
+print()
+print("=== _sanitize_filename ===")
+for raw, exp in [("hello.pdf","hello.pdf"),
+                 ("../../../etc/passwd","_.._.._etc_passwd"),
+                 ("a b c.pdf","a b c.pdf"),
+                 ("weird;rm -rf;.pdf","weird_rm -rf_.pdf"),
+                 ("",  "unnamed")]:
+    got = app._sanitize_filename(raw)
+    print(f"  {raw!r:40s} -> {got!r}")
+
+# Test _unique_filename (collisions)
+print()
+print("=== _unique_filename ===")
+st_stub.session_state.user_uploaded_artifacts = [
+    {"artifact_name": "x.pdf"}, {"artifact_name": "x (2).pdf"}
+]
+for nm in ["fresh.pdf", "x.pdf", "x (2).pdf", "y"]:
+    print(f"  {nm!r:20s} -> {app._unique_filename(nm)!r}")
+
+# Test _register_user_upload + FIFO cap
+print()
+print("=== _register_user_upload + FIFO cap ===")
+st_stub.session_state.user_uploaded_artifacts = []
+for i in range(25):
+    app._register_user_upload(f"file_{i}.pdf", "upload", 2048 + i * 10)
+arts = st_stub.session_state.user_uploaded_artifacts
+print(f"  Total after 25 uploads (cap=20): {len(arts)} -> {'PASS' if len(arts)==20 else 'FAIL'}")
+print(f"  Oldest kept: {arts[0]['artifact_name']}  (expect file_5.pdf): "
+      f"{'PASS' if arts[0]['artifact_name']=='file_5.pdf' else 'FAIL'}")
+print(f"  Newest:      {arts[-1]['artifact_name']} (expect file_24.pdf): "
+      f"{'PASS' if arts[-1]['artifact_name']=='file_24.pdf' else 'FAIL'}")
+
+# Test that camera filename pattern is right
+print()
+print("=== camera capture filename ===")
+from datetime import datetime
+sample = f"camera_capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+import re
+ok = re.fullmatch(r"camera_capture_\d{8}_\d{6}\.png", sample) is not None
+print(f"  {sample}: {'PASS' if ok else 'FAIL'}")
+
+# Test that ingest_user_upload picks a random fixture and marks ingested
+print()
+print("=== ingest_user_upload (no real OCR) ===")
+st_stub.session_state.user_uploaded_artifacts = []
+st_stub.session_state.payments = []
+st_stub.session_state.ingested_fixture_ids = set()
+app._register_user_upload("my_check.pdf", "upload", 12000)
+rec = st_stub.session_state.user_uploaded_artifacts[0]
+print(f"  Before ingest: ingested={rec['ingested']}")
+# Stub the inner ingest_fixture so we don't need full data pipeline
+captured = {}
+def fake_ingest(fixture, label):
+    captured["fixture_id"] = fixture["fixture_id"]
+    captured["filename"]   = fixture["filename"]
+    captured["label"]      = label
+app.ingest_fixture = fake_ingest
+app.ingest_user_upload(rec)
+print(f"  After ingest:  ingested={rec['ingested']}")
+print(f"  Captured fixture filename: {captured.get('filename')}")
+print(f"  Captured fixture_id starts with USERUP-: "
+      f"{'PASS' if captured.get('fixture_id','').startswith('USERUP-') else 'FAIL'}")
+print(f"  Source label was UPLOAD: {'PASS' if captured.get('label')=='UPLOAD' else 'FAIL'}")
+PYEOF
+2026-05-15T19:43:43Z [86a83c57] curl -sf -o /tmp/index.html http://localhost:8501/ && head -c 200 /tmp/index.html && echo "" && echo "---" && tail -30 /tmp/streamlit_ccra.log
+2026-05-15T19:43:43Z [86a83c57] curl -sf -o /tmp/index.html http://localhost:8501/ && head -c 200 /tmp/index.html && echo "" && echo "---" && tail -30 /tmp/streamlit_ccra.log
+2026-05-15T19:44:05Z [86a83c57] curl -sf -o /dev/null "http://localhost:8501/?embed=true"; sleep 1.5; grep -E "Traceback|Error|Exception" /tmp/streamlit_ccra.log || echo "No tracebacks in log."
+2026-05-15T19:44:05Z [86a83c57] curl -sf -o /dev/null "http://localhost:8501/?embed=true"; sleep 1.5; grep -E "Traceback|Error|Exception" /tmp/streamlit_ccra.log || echo "No tracebacks in log."
+2026-05-15T19:44:28Z [86a83c57] cd "/Users/hsharma/projects/hackathon" && pwd
+2026-05-15T19:44:28Z [86a83c57] cd "/Users/hsharma/projects/hackathon" && pwd
+2026-05-15T19:44:35Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -o -name "*development*plan*" 2>/dev/null
+2026-05-15T19:44:35Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -o -name "*development*plan*" 2>/dev/null
+2026-05-15T19:47:34Z [86a83c57] ls /Users/hsharma/projects/hackathon/
+2026-05-15T19:47:34Z [86a83c57] ls /Users/hsharma/projects/hackathon/
+2026-05-15T19:47:37Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/
+2026-05-15T19:47:37Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/
+2026-05-15T19:47:39Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/src/ && wc -l /Users/hsharma/projects/hackathon/ccra-poc/app.py
+2026-05-15T19:47:39Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/src/ && wc -l /Users/hsharma/projects/hackathon/ccra-poc/app.py
+2026-05-15T19:47:42Z [86a83c57] grep -n "MATCHED\|UNMATCHED\|UNDERPAID\|OVERPAID\|dashboard_filter\|tile\|Filter:" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -80
+2026-05-15T19:47:42Z [86a83c57] grep -n "MATCHED\|UNMATCHED\|UNDERPAID\|OVERPAID\|dashboard_filter\|tile\|Filter:" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -80
+2026-05-15T19:47:58Z [86a83c57] grep -n "selected_classification" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -20
+2026-05-15T19:47:58Z [86a83c57] grep -n "selected_classification" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -20
+2026-05-15T19:48:23Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && cat requirements.txt
+2026-05-15T19:48:23Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && cat requirements.txt
+2026-05-15T19:50:48Z [86a83c57] ps -p 2383 -o command= 2>/dev/null | head -1
+2026-05-15T19:50:48Z [86a83c57] ps -p 2383 -o command= 2>/dev/null | head -1
+2026-05-15T19:53:09Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import streamlit; print(streamlit.__version__)"
+2026-05-15T19:53:09Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import streamlit; print(streamlit.__version__)"
+2026-05-15T19:53:40Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import streamlit as st; help(st.container)" 2>&1 | head -30
+2026-05-15T19:53:40Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import streamlit as st; help(st.container)" 2>&1 | head -30
+2026-05-15T19:54:16Z [86a83c57] grep -n 'Filter:\|Showing:\|tile_MATCHED\|tile_UNDERPAID\|tile_OVERPAID\|tile_UNMATCHED' /Users/hsharma/projects/hackathon/ccra-poc/app.py
+2026-05-15T19:54:16Z [86a83c57] grep -n 'Filter:\|Showing:\|tile_MATCHED\|tile_UNDERPAID\|tile_OVERPAID\|tile_UNMATCHED' /Users/hsharma/projects/hackathon/ccra-poc/app.py
+2026-05-15T19:54:51Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import ast; ast.parse(open('app.py').read()); print('OK')"
+2026-05-15T19:54:51Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import ast; ast.parse(open('app.py').read()); print('OK')"
+2026-05-15T19:55:41Z [86a83c57] kill 2383 2>/dev/null; sleep 1; ps -p 2383 2>/dev/null && echo "still running" || echo "killed"
+2026-05-15T19:55:41Z [86a83c57] kill 2383 2>/dev/null; sleep 1; ps -p 2383 2>/dev/null && echo "still running" || echo "killed"
+2026-05-15T19:55:44Z [86a83c57] lsof -i :8501 2>/dev/null | grep LISTEN || echo "port free"
+2026-05-15T19:55:44Z [86a83c57] lsof -i :8501 2>/dev/null | grep LISTEN || echo "port free"
+2026-05-15T19:55:57Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup ./.venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit.log 2>&1 &
+echo "spawned PID: $!"
+sleep 4
+lsof -i :8501 2>/dev/null | grep LISTEN | awk '{print "listener PID:", $2}'
+2026-05-15T19:55:57Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup ./.venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit.log 2>&1 &
+echo "spawned PID: $!"
+sleep 4
+lsof -i :8501 2>/dev/null | grep LISTEN | awk '{print "listener PID:", $2}'
+2026-05-15T19:56:02Z [86a83c57] curl -s -o /dev/null -w "GET / => %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "GET /_stcore/health => %{http_code}\n" http://localhost:8501/_stcore/health
+curl -s http://localhost:8501/_stcore/health
+2026-05-15T19:56:02Z [86a83c57] curl -s -o /dev/null -w "GET / => %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "GET /_stcore/health => %{http_code}\n" http://localhost:8501/_stcore/health
+curl -s http://localhost:8501/_stcore/health
+2026-05-15T19:56:04Z [86a83c57] tail -20 /tmp/streamlit.log
+2026-05-15T19:56:04Z [86a83c57] tail -20 /tmp/streamlit.log
+2026-05-15T19:56:08Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && wc -l app.py
+2026-05-15T19:56:08Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && wc -l app.py
+2026-05-15T19:56:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/.harvey-context.json 2>/dev/null || echo "File does not exist"
+2026-05-15T19:56:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/.harvey-context.json 2>/dev/null || echo "File does not exist"
+2026-05-15T19:56:34Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -type f 2>/dev/null
+2026-05-15T19:56:34Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -type f 2>/dev/null
+2026-05-15T19:56:35Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null || echo "docs/ directory does not exist"
+2026-05-15T19:56:35Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null || echo "docs/ directory does not exist"
+2026-05-15T19:56:36Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/*.md 2>/dev/null || echo "No markdown files in root"
+2026-05-15T19:56:36Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/*.md 2>/dev/null || echo "No markdown files in root"
+2026-05-15T19:56:40Z [86a83c57] grep -i "development-plan\|sprint\|task\|done\|status" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-adfd9510fc6c80834.jsonl | head -20
+2026-05-15T19:56:40Z [86a83c57] grep -i "development-plan\|sprint\|task\|done\|status" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-adfd9510fc6c80834.jsonl | head -20
+2026-05-15T19:56:41Z [86a83c57] find /Users/hsharma/projects/hackathon -type f -name "*development*plan*" -o -name "*dev*plan*" 2>/dev/null
+2026-05-15T19:56:41Z [86a83c57] find /Users/hsharma/projects/hackathon -type f -name "*development*plan*" -o -name "*dev*plan*" 2>/dev/null
+2026-05-15T19:59:20Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ 2>&1 | head -30
+2026-05-15T19:59:20Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ 2>&1 | head -30
+2026-05-15T19:59:23Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/
+2026-05-15T19:59:23Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/
+2026-05-15T19:59:26Z [86a83c57] grep -n "render_dashboard\|tile-label\|tile-value\|tile-sub\|tile_btn\|tile-MATCHED\|tile-UNDERPAID" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -40
+2026-05-15T19:59:26Z [86a83c57] grep -n "render_dashboard\|tile-label\|tile-value\|tile-sub\|tile_btn\|tile-MATCHED\|tile-UNDERPAID" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -40
+2026-05-15T19:59:36Z [86a83c57] curl -s http://localhost:8501/ 2>&1 | head -50
+2026-05-15T19:59:36Z [86a83c57] curl -s http://localhost:8501/ 2>&1 | head -50
+2026-05-15T20:00:09Z [86a83c57] ps -p 4053 -o command= 2>&1 | head -3; echo "---"; lsof -p 4053 2>/dev/null | grep -i "python\|streamlit" | head -5
+2026-05-15T20:00:09Z [86a83c57] ps -p 4053 -o command= 2>&1 | head -3; echo "---"; lsof -p 4053 2>/dev/null | grep -i "python\|streamlit" | head -5
+2026-05-15T20:00:15Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import streamlit; print(streamlit.__version__)"
+2026-05-15T20:00:15Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import streamlit; print(streamlit.__version__)"
+2026-05-15T20:00:35Z [86a83c57] grep -n "^import\|^from" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -15
+2026-05-15T20:00:35Z [86a83c57] grep -n "^import\|^from" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -15
+2026-05-15T20:00:49Z [86a83c57] grep -n 'st.markdown' /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -30
+2026-05-15T20:00:49Z [86a83c57] grep -n 'st.markdown' /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -30
+2026-05-15T20:00:58Z [86a83c57] kill 4053 2>&1; sleep 2; ps -p 4053 2>&1 | tail -1
+2026-05-15T20:00:58Z [86a83c57] kill 4053 2>&1; sleep 2; ps -p 4053 2>&1 | tail -1
+2026-05-15T20:01:12Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup ./.venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit.log 2>&1 &
+echo "Spawned PID: $!"
+sleep 5
+echo "---log---"
+tail -20 /tmp/streamlit.log
+2026-05-15T20:01:12Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup ./.venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit.log 2>&1 &
+echo "Spawned PID: $!"
+sleep 5
+echo "---log---"
+tail -20 /tmp/streamlit.log
+2026-05-15T20:01:32Z [86a83c57] echo "=== / ==="; curl -s -o /dev/null -w "HTTP %{http_code}\n" http://localhost:8501/
+echo "=== /_stcore/health ==="; curl -s -o /dev/null -w "HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "=== streamlit PID ==="
+pgrep -fl 'streamlit run app.py' | head -3
+2026-05-15T20:01:32Z [86a83c57] echo "=== / ==="; curl -s -o /dev/null -w "HTTP %{http_code}\n" http://localhost:8501/
+echo "=== /_stcore/health ==="; curl -s -o /dev/null -w "HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "=== streamlit PID ==="
+pgrep -fl 'streamlit run app.py' | head -3
+2026-05-15T20:01:49Z [86a83c57] python3 - << 'PYEOF'
+import re
+from pathlib import Path
+
+src = Path('/Users/hsharma/projects/hackathon/ccra-poc/app.py').read_text()
+
+# Find the render_dashboard function body
+m = re.search(r'def render_dashboard\(\).*?(?=\ndef |\nclass |\Z)', src, re.DOTALL)
+body = m.group(0)
+
+# Extract the tile-rendering loop section (from `for col, code, klass, label, count in tile_specs`)
+loop_match = re.search(r'for col, code, klass, label, count in tile_specs:.*?st\.divider\(\)', body, re.DOTALL)
+loop = loop_match.group(0)
+
+# Check 1: is st.markdown(..., unsafe_allow_html=True) called on tile_html?
+md_call = re.search(r'st\.markdown\(\s*tile_html\s*,\s*unsafe_allow_html\s*=\s*True\s*\)', loop)
+print(f"[1] st.markdown(tile_html, unsafe_allow_html=True) present: {'YES' if md_call else 'NO'}")
+
+# Check 2: is the tile_html composed of the tile-label/tile-value/tile-sub divs?
+tile_html_def = re.search(r'tile_html\s*=\s*\((.*?)\)', loop, re.DOTALL)
+if tile_html_def:
+    composition = tile_html_def.group(1)
+    has_label = "tile-label" in composition
+    has_value = "tile-value" in composition
+    has_sub = "tile-sub" in composition
+    print(f"[2] tile_html composition includes tile-label/tile-value/tile-sub: {has_label and has_value and has_sub}")
+    # Verify no leading indent inside the f-string components (each fragment is a one-liner)
+    fragments = re.findall(r'f"(.*?)"', composition)
+    multi_line_indented = any(re.search(r'\n\s{4,}', frag) for frag in fragments)
+    print(f"[3] HTML fragments contain 4+ space indented multi-line content: {multi_line_indented} (should be False)")
+
+# Check 4: is the st.button used only for accessibility label (NOT for HTML rendering)?
+btn_match = re.search(r'st\.button\(\s*aria_label\s*,', loop)
+print(f"[4] st.button label is aria_label (plain text), NOT HTML: {'YES' if btn_match else 'NO'}")
+
+# Check 5: confirm no st.text(...) or st.write(...) for tile content
+has_text = "st.text(" in loop
+has_write_html = re.search(r'st\.write\([^)]*<div', loop)
+print(f"[5] No st.text() in tile loop: {'YES' if not has_text else 'NO'}")
+print(f"[6] No st.write() with HTML in tile loop: {'YES' if not has_write_html else 'NO'}")
+PYEOF
+2026-05-15T20:01:49Z [86a83c57] python3 - << 'PYEOF'
+import re
+from pathlib import Path
+
+src = Path('/Users/hsharma/projects/hackathon/ccra-poc/app.py').read_text()
+
+# Find the render_dashboard function body
+m = re.search(r'def render_dashboard\(\).*?(?=\ndef |\nclass |\Z)', src, re.DOTALL)
+body = m.group(0)
+
+# Extract the tile-rendering loop section (from `for col, code, klass, label, count in tile_specs`)
+loop_match = re.search(r'for col, code, klass, label, count in tile_specs:.*?st\.divider\(\)', body, re.DOTALL)
+loop = loop_match.group(0)
+
+# Check 1: is st.markdown(..., unsafe_allow_html=True) called on tile_html?
+md_call = re.search(r'st\.markdown\(\s*tile_html\s*,\s*unsafe_allow_html\s*=\s*True\s*\)', loop)
+print(f"[1] st.markdown(tile_html, unsafe_allow_html=True) present: {'YES' if md_call else 'NO'}")
+
+# Check 2: is the tile_html composed of the tile-label/tile-value/tile-sub divs?
+tile_html_def = re.search(r'tile_html\s*=\s*\((.*?)\)', loop, re.DOTALL)
+if tile_html_def:
+    composition = tile_html_def.group(1)
+    has_label = "tile-label" in composition
+    has_value = "tile-value" in composition
+    has_sub = "tile-sub" in composition
+    print(f"[2] tile_html composition includes tile-label/tile-value/tile-sub: {has_label and has_value and has_sub}")
+    # Verify no leading indent inside the f-string components (each fragment is a one-liner)
+    fragments = re.findall(r'f"(.*?)"', composition)
+    multi_line_indented = any(re.search(r'\n\s{4,}', frag) for frag in fragments)
+    print(f"[3] HTML fragments contain 4+ space indented multi-line content: {multi_line_indented} (should be False)")
+
+# Check 4: is the st.button used only for accessibility label (NOT for HTML rendering)?
+btn_match = re.search(r'st\.button\(\s*aria_label\s*,', loop)
+print(f"[4] st.button label is aria_label (plain text), NOT HTML: {'YES' if btn_match else 'NO'}")
+
+# Check 5: confirm no st.text(...) or st.write(...) for tile content
+has_text = "st.text(" in loop
+has_write_html = re.search(r'st\.write\([^)]*<div', loop)
+print(f"[5] No st.text() in tile loop: {'YES' if not has_text else 'NO'}")
+print(f"[6] No st.write() with HTML in tile loop: {'YES' if not has_write_html else 'NO'}")
+PYEOF
+2026-05-15T20:02:00Z [86a83c57] # Streamlit renders HTML over WebSocket, not in the initial HTTP payload.
+# Verify by reading the actual response payload and confirming the SPA loads:
+echo "=== homepage content ==="
+curl -s http://localhost:8501/ | grep -c "Streamlit" 
+echo "(Streamlit SPA shell loaded — content is rendered client-side via WS)"
+echo
+echo "=== Check that the f-string would produce un-indented HTML ==="
+python3 - << 'PYEOF'
+# Simulate what tile_html actually evaluates to for one tile
+tile_classes = "tile tile-matched"
+active_chip = ""
+label = "Matched"
+count = 12
+tile_html = (
+    f"<div class='{tile_classes}'>"
+    f"{active_chip}"
+    f"<div class='tile-label'>{label}</div>"
+    f"<div class='tile-value'>{count}</div>"
+    f"<div class='tile-sub'>remittance lines</div>"
+    f"</div>"
+)
+print("Rendered tile_html (passed to st.markdown):")
+print(repr(tile_html))
+print()
+print("Has any line with 4+ leading spaces?", any(line.startswith('    ') for line in tile_html.split('\n')))
+print("Contains <div class='tile-value'>?", "<div class='tile-value'>" in tile_html)
+PYEOF
+2026-05-15T20:02:00Z [86a83c57] # Streamlit renders HTML over WebSocket, not in the initial HTTP payload.
+# Verify by reading the actual response payload and confirming the SPA loads:
+echo "=== homepage content ==="
+curl -s http://localhost:8501/ | grep -c "Streamlit" 
+echo "(Streamlit SPA shell loaded — content is rendered client-side via WS)"
+echo
+echo "=== Check that the f-string would produce un-indented HTML ==="
+python3 - << 'PYEOF'
+# Simulate what tile_html actually evaluates to for one tile
+tile_classes = "tile tile-matched"
+active_chip = ""
+label = "Matched"
+count = 12
+tile_html = (
+    f"<div class='{tile_classes}'>"
+    f"{active_chip}"
+    f"<div class='tile-label'>{label}</div>"
+    f"<div class='tile-value'>{count}</div>"
+    f"<div class='tile-sub'>remittance lines</div>"
+    f"</div>"
+)
+print("Rendered tile_html (passed to st.markdown):")
+print(repr(tile_html))
+print()
+print("Has any line with 4+ leading spaces?", any(line.startswith('    ') for line in tile_html.split('\n')))
+print("Contains <div class='tile-value'>?", "<div class='tile-value'>" in tile_html)
+PYEOF
+2026-05-15T20:02:27Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "development-plan.md" -type f 2>/dev/null | head -20
+2026-05-15T20:02:27Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "development-plan.md" -type f 2>/dev/null | head -20
+2026-05-15T20:02:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep -E "development|plan" && echo "---" && ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null | grep -E "development|plan" || echo "docs/ directory not found or no plan files"
+2026-05-15T20:02:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep -E "development|plan" && echo "---" && ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null | grep -E "development|plan" || echo "docs/ directory not found or no plan files"
+2026-05-15T20:02:33Z [86a83c57] tail -200 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-acf7c0bd8f8bdfd69.jsonl | head -100
+2026-05-15T20:02:33Z [86a83c57] tail -200 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-acf7c0bd8f8bdfd69.jsonl | head -100
+2026-05-15T20:02:35Z [86a83c57] grep -i "development.plan\|sprint\|task.*done\|mark.*complete\|status.*done" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-acf7c0bd8f8bdfd69.jsonl | head -50
+2026-05-15T20:02:35Z [86a83c57] grep -i "development.plan\|sprint\|task.*done\|mark.*complete\|status.*done" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-acf7c0bd8f8bdfd69.jsonl | head -50
+2026-05-15T20:02:36Z [86a83c57] tail -1 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-acf7c0bd8f8bdfd69.jsonl | jq -r '.message.role, .message.content[0].text' 2>/dev/null | head -20
+2026-05-15T20:02:36Z [86a83c57] tail -1 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-acf7c0bd8f8bdfd69.jsonl | jq -r '.message.role, .message.content[0].text' 2>/dev/null | head -20
+2026-05-15T20:02:39Z [86a83c57] test -f /Users/hsharma/projects/hackathon/development-plan.md && echo "EXISTS" || echo "DOES_NOT_EXIST"
+2026-05-15T20:02:39Z [86a83c57] test -f /Users/hsharma/projects/hackathon/development-plan.md && echo "EXISTS" || echo "DOES_NOT_EXIST"
+2026-05-15T20:02:59Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/.harvey-context.json 2>&1
+2026-05-15T20:02:59Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/.harvey-context.json 2>&1
+2026-05-15T20:02:59Z [86a83c57] pwd && ls -la .harvey-context.json 2>&1
+2026-05-15T20:02:59Z [86a83c57] pwd && ls -la .harvey-context.json 2>&1
+2026-05-15T20:02:59Z [86a83c57] pwd
+2026-05-15T20:02:59Z [86a83c57] pwd
+2026-05-15T20:02:59Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -20
+2026-05-15T20:02:59Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -20
+2026-05-15T20:03:00Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:00Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:00Z [86a83c57] test -f /Users/hsharma/projects/hackathon/.harvey-context.json && echo "EXISTS" || echo "MISSING"
+2026-05-15T20:03:00Z [86a83c57] test -f /Users/hsharma/projects/hackathon/.harvey-context.json && echo "EXISTS" || echo "MISSING"
+2026-05-15T20:03:00Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:00Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:00Z [86a83c57] ls -la "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" 2>&1 | head -20
+2026-05-15T20:03:00Z [86a83c57] ls -la "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" 2>&1 | head -20
+2026-05-15T20:03:00Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json 2>/dev/null || echo "File not found"
+2026-05-15T20:03:00Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json 2>/dev/null || echo "File not found"
+2026-05-15T20:03:01Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "security-plan.md" -o -name "security-review.md" 2>/dev/null | head -20
+2026-05-15T20:03:01Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "security-plan.md" -o -name "security-review.md" 2>/dev/null | head -20
+2026-05-15T20:03:01Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "deployment-plan.md" 2>/dev/null
+2026-05-15T20:03:01Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "deployment-plan.md" 2>/dev/null
+2026-05-15T20:03:01Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs 2>/dev/null || echo "docs directory not found"
+2026-05-15T20:03:01Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs 2>/dev/null || echo "docs directory not found"
+2026-05-15T20:03:01Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:01Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:01Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:01Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:01Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -20
+2026-05-15T20:03:01Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -20
+2026-05-15T20:03:02Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -type f \( -name "development-plan.md" -o -name "qa-plan.md" -o -name "security-plan.md" -o -name "deployment-plan.md" \) 2>/dev/null
+2026-05-15T20:03:02Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -type f \( -name "development-plan.md" -o -name "qa-plan.md" -o -name "security-plan.md" -o -name "deployment-plan.md" \) 2>/dev/null
+2026-05-15T20:03:02Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ | grep -E "prd|PRD"
+2026-05-15T20:03:02Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ | grep -E "prd|PRD"
+2026-05-15T20:03:02Z [86a83c57] ls -la "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" | grep "ade347dea596b56e5"
+2026-05-15T20:03:02Z [86a83c57] ls -la "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" | grep "ade347dea596b56e5"
+2026-05-15T20:03:02Z [86a83c57] find /Users/hsharma/projects/hackathon -name "*prd*.md" -type f 2>/dev/null
+2026-05-15T20:03:02Z [86a83c57] find /Users/hsharma/projects/hackathon -name "*prd*.md" -type f 2>/dev/null
+2026-05-15T20:03:03Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-ade347dea596b56e5.jsonl 2>/dev/null | jq -r '.content // empty' | head -100
+2026-05-15T20:03:03Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-ade347dea596b56e5.jsonl 2>/dev/null | jq -r '.content // empty' | head -100
+2026-05-15T20:03:03Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -type f
+2026-05-15T20:03:03Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -type f
+2026-05-15T20:03:03Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>&1 | head -20
+2026-05-15T20:03:03Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>&1 | head -20
+2026-05-15T20:03:03Z [86a83c57] tail -200 "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl" | jq . 2>/dev/null | head -100
+2026-05-15T20:03:03Z [86a83c57] tail -200 "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl" | jq . 2>/dev/null | head -100
+2026-05-15T20:03:04Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>&1 | head -20
+2026-05-15T20:03:04Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>&1 | head -20
+2026-05-15T20:03:04Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:04Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:03:04Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:03:04Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:03:05Z [86a83c57] grep -i "ux-design\|ux design\|harvey-ux" "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl" 2>/dev/null | tail -20
+2026-05-15T20:03:05Z [86a83c57] grep -i "ux-design\|ux design\|harvey-ux" "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl" 2>/dev/null | tail -20
+2026-05-15T20:03:06Z [86a83c57] find "/Users/hsharma/projects/hackathon" -type f \( -name "index.html" -o -name "*ux*design*" \) 2>/dev/null | head -20
+2026-05-15T20:03:06Z [86a83c57] find "/Users/hsharma/projects/hackathon" -type f \( -name "index.html" -o -name "*ux*design*" \) 2>/dev/null | head -20
+2026-05-15T20:03:08Z [86a83c57] find "/Users/hsharma/projects/hackathon" -type d \( -name "ux*" -o -name "ux-designs" \) 2>/dev/null
+2026-05-15T20:03:08Z [86a83c57] find "/Users/hsharma/projects/hackathon" -type d \( -name "ux*" -o -name "ux-designs" \) 2>/dev/null
+2026-05-15T20:03:08Z [86a83c57] ls -la "/Users/hsharma/projects/hackathon/docs/" 2>/dev/null | head -20
+2026-05-15T20:03:08Z [86a83c57] ls -la "/Users/hsharma/projects/hackathon/docs/" 2>/dev/null | head -20
+2026-05-15T20:03:08Z [86a83c57] ls -la "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" 2>&1
+2026-05-15T20:03:08Z [86a83c57] ls -la "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" 2>&1
+2026-05-15T20:03:09Z [86a83c57] git log --oneline --all -20
+2026-05-15T20:03:09Z [86a83c57] git log --oneline --all -20
+2026-05-15T20:03:09Z [86a83c57] git status
+2026-05-15T20:03:09Z [86a83c57] git status
+2026-05-15T20:03:09Z [86a83c57] tail -200 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | grep -i "security\|npm audit\|pip audit\|veracode" || echo "Checking last 500 lines..."
+2026-05-15T20:03:09Z [86a83c57] tail -200 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | grep -i "security\|npm audit\|pip audit\|veracode" || echo "Checking last 500 lines..."
+2026-05-15T20:03:09Z [86a83c57] grep -i "SubagentStop\|agent.*stop\|stop.*agent" "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl" 2>/dev/null | tail -5
+2026-05-15T20:03:09Z [86a83c57] grep -i "SubagentStop\|agent.*stop\|stop.*agent" "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl" 2>/dev/null | tail -5
+2026-05-15T20:03:10Z [86a83c57] find /Users/hsharma/projects/hackathon -type f -name "*plan.md" 2>/dev/null
+2026-05-15T20:03:10Z [86a83c57] find /Users/hsharma/projects/hackathon -type f -name "*plan.md" 2>/dev/null
+2026-05-15T20:03:11Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:03:11Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:03:11Z [86a83c57] grep -i "secure\|npm audit\|pip audit\|veracode\|security-review\|security-plan" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | tail -50 | head -20
+2026-05-15T20:03:11Z [86a83c57] grep -i "secure\|npm audit\|pip audit\|veracode\|security-review\|security-plan" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | tail -50 | head -20
+2026-05-15T20:03:12Z [86a83c57] grep -i "harvey-ux-design\|ade347dea596b56e5" "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl" 2>/dev/null | head -10
+2026-05-15T20:03:12Z [86a83c57] grep -i "harvey-ux-design\|ade347dea596b56e5" "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl" 2>/dev/null | head -10
+2026-05-15T20:03:12Z [86a83c57] find /Users/hsharma/projects/hackathon -name "deployment-plan.md" -o -name "*deploy*plan*" 2>/dev/null | head -20
+2026-05-15T20:03:12Z [86a83c57] find /Users/hsharma/projects/hackathon -name "deployment-plan.md" -o -name "*deploy*plan*" 2>/dev/null | head -20
+2026-05-15T20:03:13Z [86a83c57] tail -c 5000 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | head -100
+2026-05-15T20:03:13Z [86a83c57] tail -c 5000 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | head -100
+2026-05-15T20:03:13Z [86a83c57] find /Users/hsharma/projects/hackathon/docs -type f 2>/dev/null
+2026-05-15T20:03:13Z [86a83c57] find /Users/hsharma/projects/hackathon/docs -type f 2>/dev/null
+2026-05-15T20:03:13Z [86a83c57] find /Users/hsharma/projects/hackathon -type f \( -name "architecture.md" -o -name "code-review-first-pass.md" -o -name "code-review-post-qa.md" -o -name "code-review-second-pass.md" -o -name "code-review.md" \) 2>/dev/null
+2026-05-15T20:03:13Z [86a83c57] find /Users/hsharma/projects/hackathon -type f \( -name "architecture.md" -o -name "code-review-first-pass.md" -o -name "code-review-post-qa.md" -o -name "code-review-second-pass.md" -o -name "code-review.md" \) 2>/dev/null
+2026-05-15T20:03:13Z [86a83c57] pwd && ls -la "/Users/hsharma/projects/hackathon/" | head -25
+2026-05-15T20:03:13Z [86a83c57] pwd && ls -la "/Users/hsharma/projects/hackathon/" | head -25
+2026-05-15T20:03:14Z [86a83c57] ls -la /Users/hsharma/projects/hackathon 2>/dev/null | head -20
+2026-05-15T20:03:14Z [86a83c57] ls -la /Users/hsharma/projects/hackathon 2>/dev/null | head -20
+2026-05-15T20:03:14Z [86a83c57] cat "/Users/hsharma/projects/hackathon/.harvey-context.json" 2>/dev/null
+2026-05-15T20:03:14Z [86a83c57] cat "/Users/hsharma/projects/hackathon/.harvey-context.json" 2>/dev/null
+2026-05-15T20:04:02Z [86a83c57] find /Users/hsharma/projects/hackathon -type f \( -iname "*logo*" -o -iname "*oms*" -o -iname "*itn*" -o -iname "*itrade*" \) 2>/dev/null | head -20
+2026-05-15T20:04:02Z [86a83c57] find /Users/hsharma/projects/hackathon -type f \( -iname "*logo*" -o -iname "*oms*" -o -iname "*itn*" -o -iname "*itrade*" \) 2>/dev/null | head -20
+2026-05-15T20:04:04Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/ 2>/dev/null && echo "---" && ls -la /Users/hsharma/projects/hackathon/ccra-poc/ 2>/dev/null | head -20
+2026-05-15T20:04:04Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/ 2>/dev/null && echo "---" && ls -la /Users/hsharma/projects/hackathon/ccra-poc/ 2>/dev/null | head -20
+2026-05-15T20:04:23Z [86a83c57] pwd
+2026-05-15T20:04:23Z [86a83c57] pwd
+2026-05-15T20:04:23Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -20
+2026-05-15T20:04:23Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -20
+2026-05-15T20:04:23Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep -E "(security-plan|security-review|\.harvey)"
+2026-05-15T20:04:23Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep -E "(security-plan|security-review|\.harvey)"
+2026-05-15T20:04:24Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:24Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:25Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -name "architecture.md" -o -name "code-review-first-pass.md" -o -name "code-review-post-qa.md" -o -name "code-review-second-pass.md" -o -name "code-review.md" 2>/dev/null | head -20
+2026-05-15T20:04:25Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -name "architecture.md" -o -name "code-review-first-pass.md" -o -name "code-review-post-qa.md" -o -name "code-review-second-pass.md" -o -name "code-review.md" 2>/dev/null | head -20
+2026-05-15T20:04:25Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:25Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:25Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -type f 2>/dev/null | head -20
+2026-05-15T20:04:25Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -type f 2>/dev/null | head -20
+2026-05-15T20:04:25Z [86a83c57] find /Users/hsharma/projects/hackathon -type f \( -name "index.html" -o -name "*.html" \) | grep -i "ux" | head -20
+2026-05-15T20:04:25Z [86a83c57] find /Users/hsharma/projects/hackathon -type f \( -name "index.html" -o -name "*.html" \) | grep -i "ux" | head -20
+2026-05-15T20:04:25Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -20
+2026-05-15T20:04:25Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -20
+2026-05-15T20:04:25Z [86a83c57] ls -la /Users/hsharma/projects/hackathon | head -20
+2026-05-15T20:04:25Z [86a83c57] ls -la /Users/hsharma/projects/hackathon | head -20
+2026-05-15T20:04:25Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:04:25Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:04:25Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 1 -name "*prd.md" -type f
+2026-05-15T20:04:25Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 1 -name "*prd.md" -type f
+2026-05-15T20:04:25Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl 2>/dev/null | tail -20
+2026-05-15T20:04:25Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl 2>/dev/null | tail -20
+2026-05-15T20:04:26Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>&1 || echo "docs/ does not exist"
+2026-05-15T20:04:26Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>&1 || echo "docs/ does not exist"
+2026-05-15T20:04:26Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "security-plan.md" -o -name "security-review.md" 2>/dev/null
+2026-05-15T20:04:26Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 3 -name "security-plan.md" -o -name "security-review.md" 2>/dev/null
+2026-05-15T20:04:26Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null || echo "docs directory does not exist"
+2026-05-15T20:04:26Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null || echo "docs directory does not exist"
+2026-05-15T20:04:26Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null | head -20
+2026-05-15T20:04:26Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null | head -20
+2026-05-15T20:04:27Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -30
+2026-05-15T20:04:27Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | head -30
+2026-05-15T20:04:27Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/*.md 2>&1 | head -20
+2026-05-15T20:04:27Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/*.md 2>&1 | head -20
+2026-05-15T20:04:27Z [86a83c57] find /Users/hsharma/projects/hackathon -type d \( -iname "*ux*" -o -iname "*design*" \) 2>/dev/null | head -20
+2026-05-15T20:04:27Z [86a83c57] find /Users/hsharma/projects/hackathon -type d \( -iname "*ux*" -o -iname "*design*" \) 2>/dev/null | head -20
+2026-05-15T20:04:27Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a9539246e91a8a94a.jsonl 2>/dev/null | head -100
+2026-05-15T20:04:27Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a9539246e91a8a94a.jsonl 2>/dev/null | head -100
+2026-05-15T20:04:27Z [86a83c57] find /Users/hsharma/projects/hackathon -name "qa-plan.md" 2>/dev/null
+2026-05-15T20:04:27Z [86a83c57] find /Users/hsharma/projects/hackathon -name "qa-plan.md" 2>/dev/null
+2026-05-15T20:04:28Z [86a83c57] find /Users/hsharma/projects/hackathon -name "deployment-plan.md" -type f 2>/dev/null
+2026-05-15T20:04:28Z [86a83c57] find /Users/hsharma/projects/hackathon -name "deployment-plan.md" -type f 2>/dev/null
+2026-05-15T20:04:28Z [86a83c57] find /Users/hsharma/projects/hackathon -type f -name "*architecture.md" -o -type f -name "*code-review*.md" 2>/dev/null
+2026-05-15T20:04:28Z [86a83c57] find /Users/hsharma/projects/hackathon -type f -name "*architecture.md" -o -type f -name "*code-review*.md" 2>/dev/null
+2026-05-15T20:04:29Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:29Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:29Z [86a83c57] find /Users/hsharma/projects/hackathon -name ".harvey-context.json" 2>/dev/null; find /Users/hsharma/projects/hackathon -name "*code-review*" 2>/dev/null; find /Users/hsharma/projects/hackathon -name "*qa-plan*" 2>/dev/null
+2026-05-15T20:04:29Z [86a83c57] find /Users/hsharma/projects/hackathon -name ".harvey-context.json" 2>/dev/null; find /Users/hsharma/projects/hackathon -name "*code-review*" 2>/dev/null; find /Users/hsharma/projects/hackathon -name "*qa-plan*" 2>/dev/null
+2026-05-15T20:04:29Z [86a83c57] tail -n 100 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a9539246e91a8a94a.jsonl | jq -r '.content // .text // .' 2>/dev/null | tail -50
+2026-05-15T20:04:29Z [86a83c57] tail -n 100 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a9539246e91a8a94a.jsonl | jq -r '.content // .text // .' 2>/dev/null | tail -50
+2026-05-15T20:04:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:04:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:04:30Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:30Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep -E "plan|docs"
+2026-05-15T20:04:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep -E "plan|docs"
+2026-05-15T20:04:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null || echo "docs/ directory does not exist"
+2026-05-15T20:04:30Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null || echo "docs/ directory does not exist"
+2026-05-15T20:04:30Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:30Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:30Z [86a83c57] ls -la /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/ 2>/dev/null
+2026-05-15T20:04:30Z [86a83c57] ls -la /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/ 2>/dev/null
+2026-05-15T20:04:31Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep -E "^\-" | grep -E "(development|qa|security|deployment)" || echo "No matching files in root"
+2026-05-15T20:04:31Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep -E "^\-" | grep -E "(development|qa|security|deployment)" || echo "No matching files in root"
+2026-05-15T20:04:31Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:31Z [86a83c57] cat /Users/hsharma/projects/hackathon/.harvey-context.json
+2026-05-15T20:04:31Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ | grep -E "^\-" | grep -E "(development|qa|security|deployment)" || echo "No matching files in docs/"
+2026-05-15T20:04:31Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ | grep -E "^\-" | grep -E "(development|qa|security|deployment)" || echo "No matching files in docs/"
+2026-05-15T20:04:31Z [86a83c57] find /Users/hsharma/projects/hackathon -type f -name "index.html" 2>/dev/null
+2026-05-15T20:04:31Z [86a83c57] find /Users/hsharma/projects/hackathon -type f -name "index.html" 2>/dev/null
+2026-05-15T20:04:32Z [86a83c57] wc -l /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl
+2026-05-15T20:04:32Z [86a83c57] wc -l /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl
+2026-05-15T20:04:32Z [86a83c57] find /Users/hsharma/projects/hackathon/docs -type f \( -name "*.html" -o -name "*ux*" \) 2>/dev/null
+2026-05-15T20:04:32Z [86a83c57] find /Users/hsharma/projects/hackathon/docs -type f \( -name "*.html" -o -name "*ux*" \) 2>/dev/null
+2026-05-15T20:04:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ | grep -E "deployment-plan|\.md"
+2026-05-15T20:04:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ | grep -E "deployment-plan|\.md"
+2026-05-15T20:04:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep deployment
+2026-05-15T20:04:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/ | grep deployment
+2026-05-15T20:04:32Z [86a83c57] find /Users/hsharma/projects/hackathon -type d -name "*ux*" -o -type d -name "*design*" 2>/dev/null
+2026-05-15T20:04:32Z [86a83c57] find /Users/hsharma/projects/hackathon -type d -name "*ux*" -o -type d -name "*design*" 2>/dev/null
+2026-05-15T20:04:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:04:32Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:04:33Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:04:33Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/
+2026-05-15T20:04:33Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/
+2026-05-15T20:04:33Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/
+2026-05-15T20:04:33Z [86a83c57] tail -n 200 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | grep -i "security\|scan\|audit" | head -20
+2026-05-15T20:04:33Z [86a83c57] tail -n 200 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | grep -i "security\|scan\|audit" | head -20
+2026-05-15T20:04:34Z [86a83c57] find /Users/hsharma/projects/hackathon -name "*deployment*" -type f 2>/dev/null
+2026-05-15T20:04:34Z [86a83c57] find /Users/hsharma/projects/hackathon -name "*deployment*" -type f 2>/dev/null
+2026-05-15T20:04:35Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -type f \( -name "*development-plan*" -o -name "*qa-plan*" -o -name "*security-plan*" -o -name "*deployment-plan*" \) 2>/dev/null
+2026-05-15T20:04:35Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -type f \( -name "*development-plan*" -o -name "*qa-plan*" -o -name "*security-plan*" -o -name "*deployment-plan*" \) 2>/dev/null
+2026-05-15T20:04:35Z [86a83c57] ls -la "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" 2>/dev/null | head -20
+2026-05-15T20:04:35Z [86a83c57] ls -la "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" 2>/dev/null | head -20
+2026-05-15T20:04:35Z [86a83c57] tail -20 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl
+2026-05-15T20:04:35Z [86a83c57] tail -20 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl
+2026-05-15T20:04:35Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | jq -r 'select(.type=="user" or .type=="assistant") | select(.message.content != null) | "\n---\n\(.type | ascii_upcase)\n\(.message.content)"' 2>/dev/null | tail -50
+2026-05-15T20:04:35Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | jq -r 'select(.type=="user" or .type=="assistant") | select(.message.content != null) | "\n---\n\(.type | ascii_upcase)\n\(.message.content)"' 2>/dev/null | tail -50
+2026-05-15T20:04:36Z [86a83c57] tail -c 5000 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | head -c 2000
+2026-05-15T20:04:36Z [86a83c57] tail -c 5000 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | head -c 2000
+2026-05-15T20:04:36Z [86a83c57] grep -E '"type":"user"' /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | tail -5
+2026-05-15T20:04:36Z [86a83c57] grep -E '"type":"user"' /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | tail -5
+2026-05-15T20:04:38Z [86a83c57] ls -la /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/ 2>/dev/null || echo "subagents directory does not exist"
+2026-05-15T20:04:38Z [86a83c57] ls -la /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/ 2>/dev/null || echo "subagents directory does not exist"
+2026-05-15T20:04:39Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a9539246e91a8a94a.jsonl 2>/dev/null || echo "File not found at that path"
+2026-05-15T20:04:39Z [86a83c57] cat /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a9539246e91a8a94a.jsonl 2>/dev/null || echo "File not found at that path"
+2026-05-15T20:04:39Z [86a83c57] ls -lrta "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" 2>/dev/null | tail -10
+2026-05-15T20:04:39Z [86a83c57] ls -lrta "/Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/" 2>/dev/null | tail -10
+2026-05-15T20:04:40Z [86a83c57] grep -i "development.plan\|agent_type\|harvey" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl 2>/dev/null | head -20
+2026-05-15T20:04:40Z [86a83c57] grep -i "development.plan\|agent_type\|harvey" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl 2>/dev/null | head -20
+2026-05-15T20:04:41Z [86a83c57] grep -l "a9539246e91a8a94a" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/*.meta.json 2>/dev/null || echo "Agent ID not found in meta files"
+2026-05-15T20:04:41Z [86a83c57] grep -l "a9539246e91a8a94a" /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/*.meta.json 2>/dev/null || echo "Agent ID not found in meta files"
+2026-05-15T20:04:43Z [86a83c57] find /Users/hsharma/projects/hackathon -type f \( -name "*qa-plan*" -o -name "*code-review*" -o -name "*architecture*" \) 2>/dev/null
+2026-05-15T20:04:43Z [86a83c57] find /Users/hsharma/projects/hackathon -type f \( -name "*qa-plan*" -o -name "*code-review*" -o -name "*architecture*" \) 2>/dev/null
+2026-05-15T20:04:45Z [86a83c57] ls -la /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/ 2>/dev/null || echo "No subagents directory"
+2026-05-15T20:04:45Z [86a83c57] ls -la /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/ 2>/dev/null || echo "No subagents directory"
+2026-05-15T20:04:45Z [86a83c57] head -100 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | grep -i "deploy\|agent_type" | head -20
+2026-05-15T20:04:45Z [86a83c57] head -100 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff.jsonl | grep -i "deploy\|agent_type" | head -20
+2026-05-15T20:05:00Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/ && ls /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/
+2026-05-15T20:05:00Z [86a83c57] ls /Users/hsharma/projects/hackathon/ccra-poc/ && ls /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/
+2026-05-15T20:05:04Z [86a83c57] wc -l /Users/hsharma/projects/hackathon/ccra-poc/app.py && grep -n "render_dashboard\|tile\|st-key-tile\|selected_classification\|TILE_CODES\|brand strip\|brand-strip\|MATCHED\|UNDERPAID" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -80
+2026-05-15T20:05:04Z [86a83c57] wc -l /Users/hsharma/projects/hackathon/ccra-poc/app.py && grep -n "render_dashboard\|tile\|st-key-tile\|selected_classification\|TILE_CODES\|brand strip\|brand-strip\|MATCHED\|UNDERPAID" /Users/hsharma/projects/hackathon/ccra-poc/app.py | head -80
+2026-05-15T20:05:20Z [86a83c57] cat /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/oms-tradewinds-icon.svg && echo "---" && grep -i "streamlit" /Users/hsharma/projects/hackathon/ccra-poc/requirements.txt
+2026-05-15T20:05:20Z [86a83c57] cat /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/oms-tradewinds-icon.svg && echo "---" && grep -i "streamlit" /Users/hsharma/projects/hackathon/ccra-poc/requirements.txt
+2026-05-15T20:05:30Z [86a83c57] ps -p 4724 -o command= 2>/dev/null; lsof -i :8501 -sTCP:LISTEN -t 2>/dev/null
+2026-05-15T20:05:30Z [86a83c57] ps -p 4724 -o command= 2>/dev/null; lsof -i :8501 -sTCP:LISTEN -t 2>/dev/null
+2026-05-15T20:05:33Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import streamlit; print(streamlit.__version__)"
+2026-05-15T20:05:33Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import streamlit; print(streamlit.__version__)"
+2026-05-15T20:05:41Z [86a83c57] curl -s http://localhost:8501/ -o /tmp/st_index.html 2>&1 | head -5; ls -la /tmp/st_index.html; head -c 500 /tmp/st_index.html
+2026-05-15T20:05:41Z [86a83c57] curl -s http://localhost:8501/ -o /tmp/st_index.html 2>&1 | head -5; ls -la /tmp/st_index.html; head -c 500 /tmp/st_index.html
+2026-05-15T20:06:19Z [86a83c57] mkdir -p /Users/hsharma/projects/hackathon/ccra-poc/assets && cp /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/oms-tradewinds-icon.svg /Users/hsharma/projects/hackathon/ccra-poc/assets/oms-icon.svg && ls -la /Users/hsharma/projects/hackathon/ccra-poc/assets/
+2026-05-15T20:06:19Z [86a83c57] mkdir -p /Users/hsharma/projects/hackathon/ccra-poc/assets && cp /Users/hsharma/projects/hackathon/ccra-poc/ui_inspiration/oms-tradewinds-icon.svg /Users/hsharma/projects/hackathon/ccra-poc/assets/oms-icon.svg && ls -la /Users/hsharma/projects/hackathon/ccra-poc/assets/
+2026-05-15T20:07:33Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import ast; ast.parse(open('app.py').read()); print('OK: app.py parses cleanly')"
+2026-05-15T20:07:33Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "import ast; ast.parse(open('app.py').read()); print('OK: app.py parses cleanly')"
+2026-05-15T20:09:00Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "
+NAVY='#1B3A5F'; CREAM='#F7F4ED'; code='MATCHED'
+s = (f'<style>'
+     f'div.st-key-tile-{code} '
+     f'div[data-testid=\"stButton\"] > button {{'
+     f' background: {NAVY} !important;'
+     f' color: {CREAM} !important;'
+     f' border-color: {NAVY} !important;'
+     f' }}'
+     f'</style>')
+print(s)
+import ast; ast.parse(open('app.py').read()); print('OK syntax')
+"
+2026-05-15T20:09:00Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python -c "
+NAVY='#1B3A5F'; CREAM='#F7F4ED'; code='MATCHED'
+s = (f'<style>'
+     f'div.st-key-tile-{code} '
+     f'div[data-testid=\"stButton\"] > button {{'
+     f' background: {NAVY} !important;'
+     f' color: {CREAM} !important;'
+     f' border-color: {NAVY} !important;'
+     f' }}'
+     f'</style>')
+print(s)
+import ast; ast.parse(open('app.py').read()); print('OK syntax')
+"
+2026-05-15T20:09:09Z [86a83c57] kill 4724 2>/dev/null; sleep 1; ps -p 4724 -o pid= 2>/dev/null && echo "still running" || echo "killed"; lsof -i :8501 -sTCP:LISTEN -t 2>/dev/null || echo "port free"
+2026-05-15T20:09:09Z [86a83c57] kill 4724 2>/dev/null; sleep 1; ps -p 4724 -o pid= 2>/dev/null && echo "still running" || echo "killed"; lsof -i :8501 -sTCP:LISTEN -t 2>/dev/null || echo "port free"
+2026-05-15T20:09:19Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup ./.venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit.log 2>&1 &
+sleep 3
+echo "NEW_PID=$!"
+echo "---log tail---"
+tail -20 /tmp/streamlit.log
+2026-05-15T20:09:19Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && nohup ./.venv/bin/streamlit run app.py --server.headless true --server.port 8501 > /tmp/streamlit.log 2>&1 &
+sleep 3
+echo "NEW_PID=$!"
+echo "---log tail---"
+tail -20 /tmp/streamlit.log
+2026-05-15T20:09:32Z [86a83c57] STREAMLIT_PID=$(lsof -i :8501 -sTCP:LISTEN -t)
+echo "STREAMLIT_PID=$STREAMLIT_PID"
+ps -p "$STREAMLIT_PID" -o pid=,command= 2>/dev/null
+echo "--- HTTP checks ---"
+curl -s -o /dev/null -w "GET /            -> HTTP %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "GET /_stcore/health -> HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "--- health body ---"
+curl -s http://localhost:8501/_stcore/health
+2026-05-15T20:09:32Z [86a83c57] STREAMLIT_PID=$(lsof -i :8501 -sTCP:LISTEN -t)
+echo "STREAMLIT_PID=$STREAMLIT_PID"
+ps -p "$STREAMLIT_PID" -o pid=,command= 2>/dev/null
+echo "--- HTTP checks ---"
+curl -s -o /dev/null -w "GET /            -> HTTP %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "GET /_stcore/health -> HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "--- health body ---"
+curl -s http://localhost:8501/_stcore/health
+2026-05-15T20:10:22Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python << 'PYEOF'
+import re
+from pathlib import Path
+
+src = Path("app.py").read_text()
+oms_span = "<span class='brand-oms-word'>OMS</span>"
+
+print("=" * 60)
+print("CHECK 1 — Tile click wires to selected_classification")
+print("=" * 60)
+pat = re.compile(
+    r'st\.button\(\s*[^)]*key=f"tile_btn_\{code\}".*?'
+    r'st\.session_state\.selected_classification\s*=\s*\(\s*None if active else code\s*\)',
+    re.DOTALL,
+)
+m = pat.search(src)
+print(f"  tile button -> selected_classification wiring: {'PASS' if m else 'FAIL'}")
+
+ck = src.count('st.container(key=f"tile-{code}")')
+print(f"  st.container(key=f\"tile-{{code}}\") occurrences: {ck} (expect 1, used in loop)")
+
+old_overlay = re.search(r'opacity:\s*0;[^}]*cursor:\s*pointer', src)
+print(f"  legacy invisible-button overlay (opacity:0+cursor:pointer) removed: {'PASS' if old_overlay is None else 'FAIL'}")
+
+b_strat = "Tile filter button (Strategy B)" in src
+print(f"  Strategy B filter-button CSS block present: {'PASS' if b_strat else 'FAIL'}")
+
+has_label = "Filter by" in src and "click to clear" in src
+print(f"  visible button labels (Filter by ... / click to clear): {'PASS' if has_label else 'FAIL'}")
+
+print()
+print("=" * 60)
+print("CHECK 2 — OMS logo inlined in brand strip")
+print("=" * 60)
+
+svg_path = Path("assets/oms-icon.svg")
+print(f"  assets/oms-icon.svg exists: {'PASS' if svg_path.exists() else 'FAIL'}  ({svg_path.stat().st_size} bytes)")
+svg_content = svg_path.read_text().strip()
+print(f"  SVG starts with <svg: {'PASS' if svg_content.startswith('<svg') else 'FAIL'}")
+print(f"  SVG fill #F1AA48 (gold) present: {'PASS' if 'F1AA48' in svg_content else 'FAIL'}")
+
+print(f"  render_brand_strip uses {{_OMS_ICON_SVG}} substitution: {'PASS' if '{_OMS_ICON_SVG}' in src else 'FAIL'}")
+print(f"  brand-oms-word 'OMS' span present in source: {'PASS' if oms_span in src else 'FAIL'}")
+
+print(f"  CSS .brand-oms rule present: {'PASS' if '.brand-strip .brand-oms {{' in src else 'FAIL'}")
+print(f"  brand-oms SVG height rule present: {'PASS' if '.brand-strip .brand-oms svg {{' in src else 'FAIL'}")
+print(f"  render_brand_strip uses unsafe_allow_html=True: {'PASS' if 'def render_brand_strip()' in src and 'unsafe_allow_html=True' in src else 'FAIL'}")
+
+oms_svg = Path("assets/oms-icon.svg").read_text(encoding="utf-8").strip()
+brand_html = f"""<div class='brand-strip'>
+  <div class='brand-oms' title='iTradeNetwork OMS'>
+    {oms_svg}
+    <span class='brand-oms-word'>OMS</span>
+  </div>
+  <div class='brand-divider'></div>
+  <div class='brand-center'>
+    <div class='brand-title'>Cash Collection Reconciliation</div>
+    <div class='brand-sub'>iTradeNetwork &middot; AR Operations</div>
+  </div>
+</div>"""
+inline_svg_ok = "<svg" in brand_html and "</svg>" in brand_html and "data:image" not in brand_html
+no_broken_img = "<img" not in brand_html
+no_double_escape = "&lt;svg" not in brand_html and "&amp;lt;" not in brand_html
+print(f"  brand strip HTML inlines raw <svg> (no <img>, no base64): {'PASS' if inline_svg_ok and no_broken_img else 'FAIL'}")
+print(f"  no escaped HTML (&lt;svg) in brand strip output: {'PASS' if no_double_escape else 'FAIL'}")
+print(f"  path 'M4.57873 16.1428' from real SVG appears verbatim: {'PASS' if 'M4.57873 16.1428' in brand_html else 'FAIL'}")
+PYEOF
+2026-05-15T20:10:22Z [86a83c57] cd /Users/hsharma/projects/hackathon/ccra-poc && ./.venv/bin/python << 'PYEOF'
+import re
+from pathlib import Path
+
+src = Path("app.py").read_text()
+oms_span = "<span class='brand-oms-word'>OMS</span>"
+
+print("=" * 60)
+print("CHECK 1 — Tile click wires to selected_classification")
+print("=" * 60)
+pat = re.compile(
+    r'st\.button\(\s*[^)]*key=f"tile_btn_\{code\}".*?'
+    r'st\.session_state\.selected_classification\s*=\s*\(\s*None if active else code\s*\)',
+    re.DOTALL,
+)
+m = pat.search(src)
+print(f"  tile button -> selected_classification wiring: {'PASS' if m else 'FAIL'}")
+
+ck = src.count('st.container(key=f"tile-{code}")')
+print(f"  st.container(key=f\"tile-{{code}}\") occurrences: {ck} (expect 1, used in loop)")
+
+old_overlay = re.search(r'opacity:\s*0;[^}]*cursor:\s*pointer', src)
+print(f"  legacy invisible-button overlay (opacity:0+cursor:pointer) removed: {'PASS' if old_overlay is None else 'FAIL'}")
+
+b_strat = "Tile filter button (Strategy B)" in src
+print(f"  Strategy B filter-button CSS block present: {'PASS' if b_strat else 'FAIL'}")
+
+has_label = "Filter by" in src and "click to clear" in src
+print(f"  visible button labels (Filter by ... / click to clear): {'PASS' if has_label else 'FAIL'}")
+
+print()
+print("=" * 60)
+print("CHECK 2 — OMS logo inlined in brand strip")
+print("=" * 60)
+
+svg_path = Path("assets/oms-icon.svg")
+print(f"  assets/oms-icon.svg exists: {'PASS' if svg_path.exists() else 'FAIL'}  ({svg_path.stat().st_size} bytes)")
+svg_content = svg_path.read_text().strip()
+print(f"  SVG starts with <svg: {'PASS' if svg_content.startswith('<svg') else 'FAIL'}")
+print(f"  SVG fill #F1AA48 (gold) present: {'PASS' if 'F1AA48' in svg_content else 'FAIL'}")
+
+print(f"  render_brand_strip uses {{_OMS_ICON_SVG}} substitution: {'PASS' if '{_OMS_ICON_SVG}' in src else 'FAIL'}")
+print(f"  brand-oms-word 'OMS' span present in source: {'PASS' if oms_span in src else 'FAIL'}")
+
+print(f"  CSS .brand-oms rule present: {'PASS' if '.brand-strip .brand-oms {{' in src else 'FAIL'}")
+print(f"  brand-oms SVG height rule present: {'PASS' if '.brand-strip .brand-oms svg {{' in src else 'FAIL'}")
+print(f"  render_brand_strip uses unsafe_allow_html=True: {'PASS' if 'def render_brand_strip()' in src and 'unsafe_allow_html=True' in src else 'FAIL'}")
+
+oms_svg = Path("assets/oms-icon.svg").read_text(encoding="utf-8").strip()
+brand_html = f"""<div class='brand-strip'>
+  <div class='brand-oms' title='iTradeNetwork OMS'>
+    {oms_svg}
+    <span class='brand-oms-word'>OMS</span>
+  </div>
+  <div class='brand-divider'></div>
+  <div class='brand-center'>
+    <div class='brand-title'>Cash Collection Reconciliation</div>
+    <div class='brand-sub'>iTradeNetwork &middot; AR Operations</div>
+  </div>
+</div>"""
+inline_svg_ok = "<svg" in brand_html and "</svg>" in brand_html and "data:image" not in brand_html
+no_broken_img = "<img" not in brand_html
+no_double_escape = "&lt;svg" not in brand_html and "&amp;lt;" not in brand_html
+print(f"  brand strip HTML inlines raw <svg> (no <img>, no base64): {'PASS' if inline_svg_ok and no_broken_img else 'FAIL'}")
+print(f"  no escaped HTML (&lt;svg) in brand strip output: {'PASS' if no_double_escape else 'FAIL'}")
+print(f"  path 'M4.57873 16.1428' from real SVG appears verbatim: {'PASS' if 'M4.57873 16.1428' in brand_html else 'FAIL'}")
+PYEOF
+2026-05-15T20:10:27Z [86a83c57] grep -n "brand-oms-word" /Users/hsharma/projects/hackathon/ccra-poc/app.py
+2026-05-15T20:10:27Z [86a83c57] grep -n "brand-oms-word" /Users/hsharma/projects/hackathon/ccra-poc/app.py
+2026-05-15T20:10:54Z [86a83c57] curl -s -o /dev/null -w "GET /            -> HTTP %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "GET /_stcore/health -> HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "--- streamlit log tail (errors only) ---"
+grep -iE "error|exception|traceback" /tmp/streamlit.log | tail -5 || echo "no errors in log"
+echo "--- current pid on 8501 ---"
+lsof -i :8501 -sTCP:LISTEN -t
+2026-05-15T20:10:54Z [86a83c57] curl -s -o /dev/null -w "GET /            -> HTTP %{http_code}\n" http://localhost:8501/
+curl -s -o /dev/null -w "GET /_stcore/health -> HTTP %{http_code}\n" http://localhost:8501/_stcore/health
+echo "--- streamlit log tail (errors only) ---"
+grep -iE "error|exception|traceback" /tmp/streamlit.log | tail -5 || echo "no errors in log"
+echo "--- current pid on 8501 ---"
+lsof -i :8501 -sTCP:LISTEN -t
+2026-05-15T20:11:22Z [86a83c57] cd "/Users/hsharma/projects/hackathon" && pwd
+2026-05-15T20:11:22Z [86a83c57] cd "/Users/hsharma/projects/hackathon" && pwd
+2026-05-15T20:11:26Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -name "development-plan.md" -o -name "*development*" -type f | head -20
+2026-05-15T20:11:26Z [86a83c57] find /Users/hsharma/projects/hackathon -maxdepth 2 -name "development-plan.md" -o -name "*development*" -type f | head -20
+2026-05-15T20:11:28Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null | head -30
+2026-05-15T20:11:28Z [86a83c57] ls -la /Users/hsharma/projects/hackathon/docs/ 2>/dev/null | head -30
+2026-05-15T20:11:34Z [86a83c57] tail -c 5000 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a214cf8ec435f6ef5.jsonl
+2026-05-15T20:11:34Z [86a83c57] tail -c 5000 /Users/hsharma/.claude/projects/-Users-hsharma-projects-hackathon/86a83c57-ef2b-47bc-81bf-739bd56aa6ff/subagents/agent-a214cf8ec435f6ef5.jsonl
+2026-05-15T20:11:37Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -o -name "*plan*.md" 2>/dev/null | grep -v node_modules | grep -v ".git"
+2026-05-15T20:11:37Z [86a83c57] find /Users/hsharma/projects/hackathon -name "development-plan.md" -o -name "*plan*.md" 2>/dev/null | grep -v node_modules | grep -v ".git"

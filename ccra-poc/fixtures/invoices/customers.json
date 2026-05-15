@@ -1,13 +1,13 @@
 [
-  {"customer_id": "CUST-001", "customer_name": "Bass Pro Foods", "contact_email": "ap@basspro-foods.example.com"},
-  {"customer_id": "CUST-002", "customer_name": "Kroger Central", "contact_email": "vendor.payments@kroger-central.example.com"},
-  {"customer_id": "CUST-003", "customer_name": "Whole Foods Market - Regional", "contact_email": "ap.regional@wholefoods.example.com"},
-  {"customer_id": "CUST-004", "customer_name": "Sysco Mid-Atlantic", "contact_email": "accounts.payable@sysco-midatl.example.com"},
-  {"customer_id": "CUST-005", "customer_name": "US Foods Northeast", "contact_email": "ap.northeast@usfoods.example.com"},
-  {"customer_id": "CUST-006", "customer_name": "Restaurant Depot - Boston", "contact_email": "boston.ap@restaurantdepot.example.com"},
-  {"customer_id": "CUST-007", "customer_name": "Performance Food Group", "contact_email": "vendor.relations@pfg.example.com"},
-  {"customer_id": "CUST-008", "customer_name": "Aramark Corporate Dining", "contact_email": "ap.corporate@aramark.example.com"},
-  {"customer_id": "CUST-009", "customer_name": "Compass Group North America", "contact_email": "ap.na@compass-group.example.com"},
-  {"customer_id": "CUST-010", "customer_name": "Trader Joe's East Coast", "contact_email": "ap.east@traderjoes.example.com"},
-  {"customer_id": "CUST-999", "customer_name": "Unknown Payer LLC", "contact_email": "unknown@example.com"}
+  {"customer_id": "CUST-001", "customer_name": "Bass Pro Foods", "contact_email": "ap@basspro-foods.example.com", "account_manager_name": "Sarah Chen", "account_manager_email": "sarah.chen@itradenetwork.com"},
+  {"customer_id": "CUST-002", "customer_name": "Kroger Central", "contact_email": "vendor.payments@kroger-central.example.com", "account_manager_name": "Marcus Reid", "account_manager_email": "marcus.reid@itradenetwork.com"},
+  {"customer_id": "CUST-003", "customer_name": "Whole Foods Market - Regional", "contact_email": "ap.regional@wholefoods.example.com", "account_manager_name": "Priya Patel", "account_manager_email": "priya.patel@itradenetwork.com"},
+  {"customer_id": "CUST-004", "customer_name": "Sysco Mid-Atlantic", "contact_email": "accounts.payable@sysco-midatl.example.com", "account_manager_name": "Sarah Chen", "account_manager_email": "sarah.chen@itradenetwork.com"},
+  {"customer_id": "CUST-005", "customer_name": "US Foods Northeast", "contact_email": "ap.northeast@usfoods.example.com", "account_manager_name": "Diego Alvarez", "account_manager_email": "diego.alvarez@itradenetwork.com"},
+  {"customer_id": "CUST-006", "customer_name": "Restaurant Depot - Boston", "contact_email": "boston.ap@restaurantdepot.example.com", "account_manager_name": "Marcus Reid", "account_manager_email": "marcus.reid@itradenetwork.com"},
+  {"customer_id": "CUST-007", "customer_name": "Performance Food Group", "contact_email": "vendor.relations@pfg.example.com", "account_manager_name": "Priya Patel", "account_manager_email": "priya.patel@itradenetwork.com"},
+  {"customer_id": "CUST-008", "customer_name": "Aramark Corporate Dining", "contact_email": "ap.corporate@aramark.example.com", "account_manager_name": "Rebecca Ng", "account_manager_email": "rebecca.ng@itradenetwork.com"},
+  {"customer_id": "CUST-009", "customer_name": "Compass Group North America", "contact_email": "ap.na@compass-group.example.com", "account_manager_name": "Diego Alvarez", "account_manager_email": "diego.alvarez@itradenetwork.com"},
+  {"customer_id": "CUST-010", "customer_name": "Trader Joe's East Coast", "contact_email": "ap.east@traderjoes.example.com", "account_manager_name": "Rebecca Ng", "account_manager_email": "rebecca.ng@itradenetwork.com"},
+  {"customer_id": "CUST-999", "customer_name": "Unknown Payer LLC", "contact_email": "unknown@example.com", "account_manager_name": "Sarah Chen", "account_manager_email": "sarah.chen@itradenetwork.com"}
 ]

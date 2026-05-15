@@ -1,7 +1,12 @@
-"""Template-based follow-up email drafter.
+"""Internal account-manager escalation drafter.
 
-Per PRD UC-005: produce a pre-composed email body based on the
-exception classification. No outbound send - clipboard only.
+Per PRD UC-005 (POC scope): when a payment exception is detected,
+draft a brief INTERNAL escalation to the customer's Account Manager
+(the iTN-internal salesperson who owns the relationship). The AM will
+then phone the customer.
+
+CCRA is NOT writing customer-facing copy - all drafts here are
+internal escalations from the AR Team to the AM.
 """
 
 from __future__ import annotations
@@ -15,6 +20,55 @@ def _fmt(amount) -> str:
     return f"${Decimal(str(amount)):,.2f}"
 
 
+def _first_name(full_name: str) -> str:
+    if not full_name:
+        return "there"
+    return full_name.strip().split()[0]
+
+
+def _classification_summary(
+    classification: str,
+    flags: list[str],
+    invoice_number: str,
+    invoiced_str: str,
+    paid_str: str,
+    delta_str: str,
+    check_number: str,
+) -> str:
+    """One-line factual summary of what was detected."""
+    chk = f" (check #{check_number})" if check_number else ""
+    if classification == "UNDERPAID":
+        return (
+            f"Detected: UNDERPAID on invoice {invoice_number}. "
+            f"Expected {invoiced_str}, received {paid_str}{chk} - "
+            f"short by {delta_str}."
+        )
+    if classification == "OVERPAID":
+        if "DUPLICATE" in (flags or []):
+            return (
+                f"Detected: OVERPAID / DUPLICATE on invoice {invoice_number}. "
+                f"Invoice already paid in full; additional {paid_str}{chk} "
+                f"received (surplus {delta_str})."
+            )
+        return (
+            f"Detected: OVERPAID on invoice {invoice_number}. "
+            f"Expected {invoiced_str}, received {paid_str}{chk} - "
+            f"surplus of {delta_str}."
+        )
+    if classification == "UNMATCHED":
+        return (
+            f"Detected: UNMATCHED. Payment of {paid_str}{chk} references "
+            f"invoice {invoice_number}, but no invoice with that number "
+            f"was found in our system."
+        )
+    # MATCHED with flags (typically PAYER_MISMATCH only)
+    return (
+        f"Detected: PAYER_MISMATCH on invoice {invoice_number}. "
+        f"Amount {paid_str}{chk} matches the invoice balance, but the "
+        f"payer name on the payment did not match our customer of record."
+    )
+
+
 def draft_follow_up(
     classification: str,
     flags: list[str],
@@ -23,99 +77,73 @@ def draft_follow_up(
     invoiced_amount,
     paid_amount,
     delta_amount,
-    contact_email: str = "",
+    contact_email: str = "",  # kept for back-compat; not used in body
     check_number: str = "",
+    customer_name: str = "",
+    account_manager_name: str = "",
+    account_manager_email: str = "",
 ) -> dict:
-    """Build a follow-up email draft. Returns dict with subject, to, body."""
+    """Build an INTERNAL escalation email to the Account Manager.
+
+    Returns dict with: to, to_name, subject, body, customer_name.
+    """
 
     abs_delta = abs(Decimal(str(delta_amount or 0)))
     invoiced_str = _fmt(invoiced_amount)
     paid_str = _fmt(paid_amount)
     delta_str = _fmt(abs_delta)
 
-    is_duplicate = "DUPLICATE" in (flags or [])
-    is_payer_mismatch = "PAYER_MISMATCH" in (flags or [])
+    # Display values
+    cust = customer_name or payer_name or "(unknown customer)"
+    am_name = account_manager_name or "(unassigned Account Manager)"
+    am_email = account_manager_email or "(no AM email on file)"
+    am_first = _first_name(account_manager_name)
 
-    if classification == "UNDERPAID":
-        subject = f"Re: Payment for {invoice_number} - short by {delta_str}"
-        body = (
-            f"Hi {payer_name},\n\n"
-            f"Thank you for your recent payment"
-            f"{f' (check #{check_number})' if check_number else ''}. "
-            f"We received {paid_str} applied to invoice {invoice_number}, "
-            f"which has an outstanding balance of {invoiced_str}. "
-            f"That leaves a short-pay of {delta_str}.\n\n"
-            f"Could you please confirm whether this short-pay is intentional "
-            f"(e.g., a claim or credit being applied) and, if so, let us know "
-            f"the reason so we can update our records? If it was unintentional, "
-            f"please send a follow-up payment for the difference at your "
-            f"earliest convenience.\n\n"
-            f"Thanks,\nAR Team"
-        )
-    elif classification == "OVERPAID":
-        subject = f"Re: Overpayment on {invoice_number} - {delta_str} surplus"
-        if is_duplicate:
-            body = (
-                f"Hi {payer_name},\n\n"
-                f"We received a payment of {paid_str} referencing invoice "
-                f"{invoice_number}, but our records show this invoice has "
-                f"already been paid in full. The {paid_str} appears to be an "
-                f"additional payment.\n\n"
-                f"Could you please clarify whether this was intended for another "
-                f"open invoice, or would you like us to issue a refund / apply "
-                f"it as a credit on your account?\n\n"
-                f"Thanks,\nAR Team"
-            )
-        else:
-            body = (
-                f"Hi {payer_name},\n\n"
-                f"Thank you for your payment"
-                f"{f' (check #{check_number})' if check_number else ''}. "
-                f"We received {paid_str} applied to invoice {invoice_number} "
-                f"(balance {invoiced_str}). This leaves an overpayment of "
-                f"{delta_str}.\n\n"
-                f"How would you like us to apply the surplus - as a credit on "
-                f"your account, or against a specific other invoice? Please let "
-                f"us know so we can post it correctly.\n\n"
-                f"Thanks,\nAR Team"
-            )
-    elif classification == "UNMATCHED":
-        subject = f"Payment received - invoice {invoice_number} not found"
-        body = (
-            f"Hi {payer_name},\n\n"
-            f"We received a payment of {paid_str}"
-            f"{f' (check #{check_number})' if check_number else ''} "
-            f"referencing invoice number {invoice_number}, but we could not "
-            f"locate an invoice with that number in our system.\n\n"
-            f"Could you please confirm:\n"
-            f"  - The correct invoice number(s) this payment is intended for, "
-            f"or\n"
-            f"  - A copy of the original invoice if you believe it was issued "
-            f"by us\n\n"
-            f"so we can apply the payment correctly?\n\n"
-            f"Thanks,\nAR Team"
-        )
-    else:  # MATCHED with flags (typically PAYER_MISMATCH only)
-        subject = f"Payment received for {invoice_number} - payer name clarification"
-        body = (
-            f"Hi {payer_name},\n\n"
-            f"We received a payment of {paid_str} for invoice {invoice_number}. "
-            f"The amount matches the invoice balance, but the payer name on the "
-            f"payment did not match our customer of record for this invoice. "
-            f"Could you confirm this payment was issued on behalf of the "
-            f"invoiced customer so we can record it correctly?\n\n"
-            f"Thanks,\nAR Team"
-        )
+    subject = f"Payment exception - {cust} - {invoice_number}"
 
-    if is_payer_mismatch and classification != "MATCHED":
-        body += (
-            "\n\nNote: The payer name on the payment did not match our customer "
-            "of record for this invoice - please confirm this payment is "
-            "associated with the correct account."
-        )
+    detected_line = _classification_summary(
+        classification=classification,
+        flags=flags or [],
+        invoice_number=invoice_number,
+        invoiced_str=invoiced_str,
+        paid_str=paid_str,
+        delta_str=delta_str,
+        check_number=check_number,
+    )
+
+    # Build the factual summary block (one fact per line)
+    facts = [
+        f"  - Customer:           {cust}",
+        f"  - Invoice #:          {invoice_number}",
+        f"  - Amount expected:    {invoiced_str}",
+        f"  - Amount paid:        {paid_str}",
+        f"  - Delta:              {delta_str}",
+        f"  - Classification:     {classification}",
+    ]
+    if flags:
+        facts.append(f"  - Flags:              {', '.join(flags)}")
+    if check_number:
+        facts.append(f"  - Check / ref #:      {check_number}")
+    if payer_name and customer_name and payer_name.strip().lower() != customer_name.strip().lower():
+        facts.append(f"  - Payer name on remit: {payer_name}")
+
+    facts_block = "\n".join(facts)
+
+    body = (
+        f"Hi {am_first},\n\n"
+        f"{detected_line}\n\n"
+        f"Summary:\n"
+        f"{facts_block}\n\n"
+        f"Could you reach out to {cust} to confirm and resolve? "
+        f"Let me know if you need any additional context from the "
+        f"remittance.\n\n"
+        f"Thanks,\nAR Team"
+    )
 
     return {
-        "to": contact_email or "(no contact email on file)",
+        "to": am_email,
+        "to_name": am_name,
         "subject": subject,
         "body": body,
+        "customer_name": cust,
     }
