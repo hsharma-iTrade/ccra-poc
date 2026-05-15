@@ -45,14 +45,33 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Palette (iTradeNetwork)
-NAVY = "#1B3A5F"
-GREEN = "#4F6B3A"
-GOLD = "#C4A04A"
-CREAM = "#F7F4ED"
-TEXT = "#1A1A1A"
-BORDER = "#D9D2C2"
-RED = "#B33A3A"
+# Palette — OMS-inspired (iTradeNetwork OMS look-and-feel)
+NAVY = "#1B3A5F"          # brand strip background only
+OMS_GOLD = "#F1AA48"       # OMS swirl icon
+
+# Page chrome
+BG_PAGE = "#FFFFFF"        # main content surface (was CREAM)
+BG_SUBTLE = "#FAFAFA"      # table headers, hover states
+BORDER_LIGHT = "#EFEFEF"   # 1px row + section dividers
+BORDER_MED = "#D5D5D5"     # button/input borders
+TEXT_PRIMARY = "#1E1E1E"
+TEXT_MUTED = "#6C6C6C"
+
+# Status pill colors
+PILL_GOLD_BG = "#FCEFD3"
+PILL_GOLD_TX = "#A47718"
+PILL_GREEN_BG = "#E0F2E5"
+PILL_GREEN_TX = "#1F7A3A"
+PILL_RED_BG = "#FCE5E5"
+PILL_RED_TX = "#A02828"
+
+# Backwards-compat aliases (used by older f-strings further down).
+CREAM = BG_PAGE
+TEXT = TEXT_PRIMARY
+BORDER = BORDER_LIGHT
+GREEN = PILL_GREEN_TX
+GOLD = PILL_GOLD_TX
+RED = PILL_RED_TX
 
 
 st.markdown(
@@ -60,36 +79,52 @@ st.markdown(
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
+      /* ---- Streamlit Cloud chrome clearance (Fix 3) ---- */
+      .stApp > header {{ background: transparent; }}
+      .block-container {{ padding-top: 5rem !important; }}
+      #MainMenu {{ visibility: hidden; }}
+      footer {{ visibility: hidden; }}
+
       /* ---- Page chrome ---- */
       .stApp {{
-        background: {CREAM};
-        color: {TEXT};
-      }}
-      .block-container {{
-        padding-top: 0.5rem !important;
+        background: {BG_PAGE};
+        color: {TEXT_PRIMARY};
       }}
       body, .stMarkdown, .stCaption, p, span, div, label, input, textarea {{
         font-family: 'Inter', 'Source Sans Pro', sans-serif;
       }}
-      /* Serif headlines */
-      h1, h2, h3,
-      .stMarkdown h1, .stMarkdown h2, .stMarkdown h3,
+      /* OMS-style: sans-serif headlines (Inter 600/700), not Playfair */
+      h1, h2, h3, h4, h5,
+      .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5,
       [data-testid="stHeader"] h1,
       [data-testid="stHeader"] h2,
-      [data-testid="stHeader"] h3,
-      .ccra-serif {{
-        font-family: 'Playfair Display', Georgia, serif !important;
-        color: {NAVY};
-        letter-spacing: 0.2px;
+      [data-testid="stHeader"] h3 {{
+        font-family: 'Inter', 'Source Sans Pro', sans-serif !important;
+        color: {TEXT_PRIMARY};
+        font-weight: 700;
+        letter-spacing: -0.2px;
       }}
+      /* The single Playfair flourish — only used by the brand-strip title */
+      .ccra-serif {{
+        font-family: 'Inter', 'Source Sans Pro', sans-serif !important;
+        color: {TEXT_PRIMARY};
+        font-weight: 700;
+        letter-spacing: -0.2px;
+      }}
+      /* Sidebar styling (when present) */
+      [data-testid="stSidebar"] {{
+        background: {BG_PAGE};
+        border-right: 1px solid {BORDER_LIGHT};
+      }}
+      [data-testid="stSidebar"] * {{ color: {TEXT_PRIMARY}; }}
 
-      /* ---- Brand header strip ---- */
+      /* ---- Brand header strip (kept navy — the one premium accent) ---- */
       .brand-strip {{
         background: {NAVY};
-        color: {CREAM};
+        color: #FFFFFF;
         padding: 14px 22px;
         margin: 0 -1rem 18px -1rem;
-        border-bottom: 3px solid {GOLD};
+        border-bottom: 3px solid {OMS_GOLD};
         display: flex;
         align-items: center;
         gap: 22px;
@@ -98,7 +133,7 @@ st.markdown(
         display: flex;
         align-items: center;
         gap: 8px;
-        background: {CREAM};
+        background: #FFFFFF;
         padding: 6px 12px;
         border-radius: 4px;
         flex: 0 0 auto;
@@ -119,7 +154,7 @@ st.markdown(
       .brand-strip .brand-divider {{
         width: 1px;
         align-self: stretch;
-        background: rgba(247,244,237,0.25);
+        background: rgba(255,255,255,0.25);
         margin: 4px 0;
         flex: 0 0 auto;
       }}
@@ -127,10 +162,11 @@ st.markdown(
         flex: 1 1 auto;
       }}
       .brand-strip .brand-title {{
+        /* The ONE Playfair flourish — page still has a small accent */
         font-family: 'Playfair Display', Georgia, serif;
         font-size: 20px;
         font-weight: 700;
-        color: {CREAM};
+        color: #FFFFFF;
         letter-spacing: 0.4px;
       }}
       .brand-strip .brand-sub {{
@@ -141,73 +177,78 @@ st.markdown(
         letter-spacing: 1.2px;
       }}
 
-      /* ---- Tiles ---- */
+      /* ---- KPI Tiles — OMS-style left-edge color bar ---- */
       .tile {{
-        padding: 22px 22px 18px 22px;
+        padding: 18px 18px 14px 22px;
         border-radius: 6px;
-        border: 1px solid {BORDER};
+        border: 1px solid {BORDER_LIGHT};
         background: #FFFFFF;
-        box-shadow: 0 1px 3px rgba(27,58,95,0.06);
+        position: relative;
+        overflow: hidden;
       }}
-      .tile-matched   {{ border-top: 6px solid {GREEN};  }}
-      .tile-underpaid {{ border-top: 6px solid {RED};    }}
-      .tile-overpaid  {{ border-top: 6px solid {GOLD};   }}
-      .tile-unmatched {{ border-top: 6px solid {RED};    }}
-      .tile-info      {{ border-top: 6px solid {NAVY};   }}
+      .tile::before {{
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: {TEXT_MUTED};
+      }}
+      .tile-matched::before   {{ background: {PILL_GREEN_TX}; }}
+      .tile-underpaid::before {{ background: {PILL_RED_TX};   }}
+      .tile-overpaid::before  {{ background: {PILL_GOLD_TX};  }}
+      .tile-unmatched::before {{ background: {PILL_RED_TX};   }}
+      .tile-info::before      {{ background: {NAVY};          }}
       .tile-label {{
+        font-family: 'Inter', sans-serif;
         font-size: 11px;
-        color: #6F6655;
+        color: {TEXT_MUTED};
         text-transform: uppercase;
-        letter-spacing: 1.4px;
+        letter-spacing: 0.5px;
         font-weight: 600;
       }}
       .tile-value {{
-        font-family: 'Playfair Display', Georgia, serif;
+        font-family: 'Inter', sans-serif;
         font-size: 44px;
         font-weight: 700;
-        color: {NAVY};
+        color: {TEXT_PRIMARY};
         line-height: 1.0;
         margin-top: 6px;
       }}
       .tile-sub {{
+        font-family: 'Inter', sans-serif;
         font-size: 12px;
-        color: #8A8270;
+        color: {TEXT_MUTED};
         margin-top: 6px;
       }}
-      .tile-matched   .tile-value {{ color: {GREEN}; }}
-      .tile-overpaid  .tile-value {{ color: {GOLD};  }}
-      .tile-underpaid .tile-value {{ color: {RED};   }}
-      .tile-unmatched .tile-value {{ color: {RED};   }}
       .tile {{
-        position: relative;
         cursor: pointer;
-        transition: box-shadow 0.15s ease, transform 0.15s ease;
+        transition: box-shadow 0.12s ease, border-color 0.12s ease;
       }}
       .tile:hover {{
-        box-shadow: 0 4px 10px rgba(27,58,95,0.15);
-        transform: translateY(-1px);
+        background: {BG_SUBTLE};
       }}
       .tile-active {{
-        box-shadow: 0 0 0 2px {NAVY}, 0 4px 12px rgba(27,58,95,0.18) !important;
-        transform: translateY(-1px);
+        box-shadow: 0 0 0 1px {TEXT_PRIMARY} inset !important;
       }}
       .tile-active-chip {{
         position: absolute;
-        top: 12px;
+        top: 10px;
         right: 12px;
         font-family: 'Inter', sans-serif;
         font-size: 10px;
         font-weight: 700;
-        color: {CREAM};
-        background: {NAVY};
+        color: #FFFFFF;
+        background: {TEXT_PRIMARY};
         padding: 3px 9px;
         border-radius: 11px;
-        letter-spacing: 0.6px;
+        letter-spacing: 0.5px;
         text-transform: uppercase;
       }}
       .tile-active-chip::before {{
         content: '● ';
-        color: {GOLD};
+        color: {OMS_GOLD};
         margin-right: 2px;
       }}
 
@@ -238,95 +279,107 @@ st.markdown(
       div.st-key-tile-UNMATCHED div[data-testid="stButton"] > button {{
         width: 100%;
         background: #FFFFFF;
-        color: {NAVY};
-        border: 1px solid {BORDER};
+        color: {TEXT_PRIMARY};
+        border: 1px solid {BORDER_LIGHT};
         border-top: none;
         border-radius: 0 0 6px 6px;
         padding: 10px 12px !important;
         font-family: 'Inter', sans-serif;
         font-size: 11px;
         font-weight: 700;
-        letter-spacing: 1.2px;
+        letter-spacing: 0.5px;
         text-transform: uppercase;
         cursor: pointer;
-        box-shadow: 0 1px 3px rgba(27,58,95,0.06);
         transition: background 0.12s ease, color 0.12s ease;
       }}
       div.st-key-tile-MATCHED div[data-testid="stButton"] > button:hover,
       div.st-key-tile-UNDERPAID div[data-testid="stButton"] > button:hover,
       div.st-key-tile-OVERPAID div[data-testid="stButton"] > button:hover,
       div.st-key-tile-UNMATCHED div[data-testid="stButton"] > button:hover {{
-        background: {CREAM};
-        color: {NAVY};
-        border-color: {NAVY};
+        background: {BG_SUBTLE};
+        color: {TEXT_PRIMARY};
+        border-color: {BORDER_MED};
       }}
       div.st-key-tile-MATCHED div[data-testid="stButton"] > button:focus,
       div.st-key-tile-UNDERPAID div[data-testid="stButton"] > button:focus,
       div.st-key-tile-OVERPAID div[data-testid="stButton"] > button:focus,
       div.st-key-tile-UNMATCHED div[data-testid="stButton"] > button:focus {{
         outline: none !important;
-        box-shadow: 0 0 0 2px {NAVY} !important;
+        box-shadow: 0 0 0 1px {TEXT_PRIMARY} !important;
       }}
-      /* Active state — solid navy footer with cream text. */
+      /* Active state — solid dark OMS-style CTA footer */
       div.st-key-tile-MATCHED.tile-wrap-active div[data-testid="stButton"] > button,
       div.st-key-tile-UNDERPAID.tile-wrap-active div[data-testid="stButton"] > button,
       div.st-key-tile-OVERPAID.tile-wrap-active div[data-testid="stButton"] > button,
       div.st-key-tile-UNMATCHED.tile-wrap-active div[data-testid="stButton"] > button {{
-        background: {NAVY};
-        color: {CREAM};
-        border-color: {NAVY};
+        background: {TEXT_PRIMARY};
+        color: #FFFFFF;
+        border-color: {TEXT_PRIMARY};
       }}
       /* Tile body must NOT have rounded bottom corners — the button is the footer. */
       .tile-has-button {{
         border-radius: 6px 6px 0 0 !important;
-        box-shadow: none !important;
+        border-bottom: none !important;
       }}
 
-      /* ---- Badges ---- */
+      /* ---- Status Pills (OMS-style with leading dot) ---- */
       .badge {{
-        display: inline-block;
-        padding: 3px 9px;
-        border-radius: 11px;
-        font-size: 10px;
-        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 10px 3px 8px;
+        border-radius: 12px;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 600;
         margin-right: 4px;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        border: 1px solid transparent;
+        letter-spacing: 0.2px;
+        text-transform: none;
+        border: none;
+        line-height: 1.4;
       }}
-      .b-matched   {{ background: #E6EFDD; color: {GREEN}; border-color: #C8D8B5; }}
-      .b-underpaid {{ background: #F4DCDC; color: {RED};   border-color: #E3B9B9; }}
-      .b-overpaid  {{ background: #F5E9C9; color: #7A6320; border-color: #E4D29A; }}
-      .b-unmatched {{ background: #F4DCDC; color: {RED};   border-color: #E3B9B9; }}
-      .b-flag      {{ background: #FBF1D5; color: #7A6320; border-color: {GOLD}; }}
+      .badge::before {{
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        margin-right: 6px;
+        background: currentColor;
+      }}
+      .b-matched   {{ background: {PILL_GREEN_BG}; color: {PILL_GREEN_TX}; }}
+      .b-underpaid {{ background: {PILL_RED_BG};   color: {PILL_RED_TX};   }}
+      .b-overpaid  {{ background: {PILL_GOLD_BG};  color: {PILL_GOLD_TX};  }}
+      .b-unmatched {{ background: {PILL_RED_BG};   color: {PILL_RED_TX};   }}
+      .b-flag      {{ background: {PILL_GOLD_BG};  color: {PILL_GOLD_TX};  }}
 
       /* ---- Artifact preview ---- */
       .artifact-preview {{
         background: #FFFFFF;
-        border: 1px solid {BORDER};
+        border: 1px solid {BORDER_LIGHT};
         border-radius: 6px;
         padding: 14px 16px;
         font-family: 'SF Mono', Menlo, monospace;
         font-size: 12px;
-        color: #2E2A20;
+        color: {TEXT_PRIMARY};
         white-space: pre-wrap;
       }}
 
-      /* ---- Drilldown header ---- */
+      /* ---- Drilldown header (OMS-style: subtle, not a navy bar) ---- */
       .drill-header {{
-        background: {NAVY};
-        color: {CREAM};
+        background: {BG_SUBTLE};
+        color: {TEXT_PRIMARY};
         padding: 12px 18px;
         border-radius: 6px 6px 0 0;
         margin-top: 8px;
-        font-family: 'Playfair Display', Georgia, serif;
-        font-size: 18px;
-        font-weight: 600;
-        border-bottom: 2px solid {GOLD};
+        font-family: 'Inter', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        border: 1px solid {BORDER_LIGHT};
+        border-bottom: 1px solid {BORDER_LIGHT};
       }}
       .drill-body {{
-        background: {CREAM};
-        border: 1px solid {BORDER};
+        background: #FFFFFF;
+        border: 1px solid {BORDER_LIGHT};
         border-top: none;
         padding: 16px;
         border-radius: 0 0 6px 6px;
@@ -335,8 +388,8 @@ st.markdown(
       /* ---- AM "To:" header on email panel ---- */
       .am-to-card {{
         background: #FFFFFF;
-        border: 1px solid {BORDER};
-        border-left: 6px solid {NAVY};
+        border: 1px solid {BORDER_LIGHT};
+        border-left: 4px solid {NAVY};
         border-radius: 6px;
         padding: 14px 18px;
         margin-bottom: 12px;
@@ -346,106 +399,111 @@ st.markdown(
         font-size: 10px;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: {NAVY};
+        letter-spacing: 0.5px;
+        color: {TEXT_MUTED};
       }}
       .am-to-name {{
-        font-family: 'Playfair Display', Georgia, serif;
-        font-size: 20px;
-        font-weight: 600;
-        color: {NAVY};
+        font-family: 'Inter', sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: {TEXT_PRIMARY};
         margin-top: 2px;
       }}
       .am-to-email {{
         font-family: 'SF Mono', Menlo, monospace;
         font-size: 13px;
-        color: #4A4A4A;
+        color: {TEXT_MUTED};
         margin-top: 2px;
       }}
       .am-to-note {{
         font-size: 11px;
-        color: #6F6655;
+        color: {TEXT_MUTED};
         margin-top: 8px;
         font-style: italic;
       }}
 
-      /* ---- Buttons ---- */
+      /* ---- Buttons (OMS-style dark primary + white secondary) ---- */
       .stButton > button {{
-        border-radius: 4px;
+        border-radius: 6px;
         font-family: 'Inter', sans-serif;
         font-weight: 600;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.2px;
+        padding: 0.5rem 1rem;
       }}
       .stButton > button[kind="primary"] {{
-        background: {NAVY};
-        color: {CREAM};
-        border: 1px solid {NAVY};
+        background: {TEXT_PRIMARY};
+        color: #FFFFFF;
+        border: 1px solid {TEXT_PRIMARY};
       }}
       .stButton > button[kind="primary"]:hover {{
-        background: #122A45;
-        border-color: #122A45;
-        color: {CREAM};
+        background: #000000;
+        border-color: #000000;
+        color: #FFFFFF;
       }}
       .stButton > button[kind="secondary"] {{
         background: #FFFFFF;
-        color: {NAVY};
-        border: 1px solid {BORDER};
+        color: {TEXT_PRIMARY};
+        border: 1px solid {BORDER_MED};
       }}
       .stButton > button[kind="secondary"]:hover {{
-        border-color: {NAVY};
-        color: {NAVY};
+        border-color: {TEXT_PRIMARY};
+        color: {TEXT_PRIMARY};
+        background: {BG_SUBTLE};
       }}
       .stDownloadButton > button {{
-        background: {GREEN};
-        color: {CREAM};
-        border: 1px solid {GREEN};
-        border-radius: 4px;
+        background: #FFFFFF;
+        color: {TEXT_PRIMARY};
+        border: 1px solid {BORDER_MED};
+        border-radius: 6px;
         font-weight: 600;
       }}
       .stDownloadButton > button:hover {{
-        background: #3F5A2D;
-        border-color: #3F5A2D;
-        color: {CREAM};
+        background: {BG_SUBTLE};
+        border-color: {TEXT_PRIMARY};
+        color: {TEXT_PRIMARY};
       }}
 
       /* ---- Inputs ---- */
       .stTextInput input, .stTextArea textarea {{
         background: #FFFFFF;
-        border-radius: 4px;
-        border: 1px solid {BORDER};
-        color: {TEXT};
+        border-radius: 6px;
+        border: 1px solid {BORDER_MED};
+        color: {TEXT_PRIMARY};
+        font-family: 'Inter', sans-serif;
       }}
       .stTextInput input:focus, .stTextArea textarea:focus {{
-        border-color: {NAVY};
-        box-shadow: 0 0 0 1px {NAVY};
+        border-color: {TEXT_PRIMARY};
+        box-shadow: 0 0 0 1px {TEXT_PRIMARY};
       }}
 
       /* ---- Divider ---- */
-      hr {{ border-color: {BORDER} !important; }}
+      hr {{ border-color: {BORDER_LIGHT} !important; }}
 
-      /* ---- st.container border ---- */
+      /* ---- st.container border (denser row list) ---- */
       div[data-testid="stVerticalBlockBorderWrapper"] > div {{
-        border-color: {BORDER} !important;
+        border-color: {BORDER_LIGHT} !important;
         background: #FFFFFF;
       }}
 
       /* ---- Metric ---- */
       [data-testid="stMetricValue"] {{
-        font-family: 'Playfair Display', Georgia, serif;
-        color: {NAVY};
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        color: {TEXT_PRIMARY};
       }}
       [data-testid="stMetricLabel"] {{
-        color: #6F6655;
+        color: {TEXT_MUTED};
         text-transform: uppercase;
-        letter-spacing: 1.2px;
+        letter-spacing: 0.5px;
         font-size: 11px !important;
+        font-weight: 600;
       }}
 
       /* ---- Compact "+" upload popover button ---- */
       div[data-testid="stPopover"] > div > button {{
-        background: {NAVY} !important;
-        color: {CREAM} !important;
-        border: 1px solid {NAVY} !important;
+        background: {TEXT_PRIMARY} !important;
+        color: #FFFFFF !important;
+        border: 1px solid {TEXT_PRIMARY} !important;
         border-radius: 50% !important;
         width: 32px !important;
         height: 32px !important;
@@ -457,12 +515,11 @@ st.markdown(
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        box-shadow: 0 1px 3px rgba(27,58,95,0.18);
       }}
       div[data-testid="stPopover"] > div > button:hover {{
-        background: #122A45 !important;
-        border-color: {GOLD} !important;
-        color: {CREAM} !important;
+        background: #000000 !important;
+        border-color: #000000 !important;
+        color: #FFFFFF !important;
       }}
       div[data-testid="stPopover"] > div > button p {{
         font-size: 18px !important;
@@ -745,8 +802,7 @@ def render_header():
     left, right = st.columns([5, 2])
     with left:
         st.markdown(
-            # "<h2 class='ccra-serif' style='margin-bottom:2px;'>CCRA</h2>"
-            "<div style='color:#6F6655;font-size:13px;'>"
+            f"<div style='color:{TEXT_MUTED};font-size:13px;'>"
             "Forward remittances &middot; auto-match &middot; surface exceptions &middot; "
             "draft AM escalations."
             "</div>",
@@ -815,11 +871,11 @@ def render_inbox():
                 with a:
                     badge = "&#10003;" if already else "&middot;"
                     st.markdown(
-                        f"<div style='color:{NAVY};font-weight:600;'>{badge} {fix['subject']}</div>"
-                        f"<div style='color:#6F6655;font-size:12px;'>"
+                        f"<div style='color:{TEXT_PRIMARY};font-weight:600;'>{badge} {fix['subject']}</div>"
+                        f"<div style='color:{TEXT_MUTED};font-size:12px;'>"
                         f"{fix['from_email']} &middot; {fix['received_at']} &middot; "
                         f"{fix['source_channel']} &middot; {fix['artifact_ref']}</div>"
-                        f"<div style='color:#2E2A20;font-size:13px;margin-top:4px;'>"
+                        f"<div style='color:{TEXT_PRIMARY};font-size:13px;margin-top:4px;'>"
                         f"{fix['preview_snippet']}</div>",
                         unsafe_allow_html=True,
                     )
@@ -846,14 +902,14 @@ def render_inbox():
         with hdr_right:
             with st.popover("+", use_container_width=False, help="Upload a PDF or take a photo"):
                 st.markdown(
-                    "<div style='font-family:Playfair Display,Georgia,serif;color:#1B3A5F;"
-                    "font-size:16px;font-weight:600;margin-bottom:6px;'>Add an artifact</div>",
+                    f"<div style='font-family:Inter,sans-serif;color:{TEXT_PRIMARY};"
+                    "font-size:16px;font-weight:700;margin-bottom:6px;'>Add an artifact</div>",
                     unsafe_allow_html=True,
                 )
 
                 # --- Option 1: Upload PDF ---
                 st.markdown(
-                    "<div style='color:#1B3A5F;font-weight:600;font-size:13px;margin-top:4px;"
+                    f"<div style='color:{TEXT_PRIMARY};font-weight:600;font-size:13px;margin-top:4px;"
                     "margin-bottom:2px;'>1. Upload PDF</div>",
                     unsafe_allow_html=True,
                 )
@@ -872,7 +928,7 @@ def render_inbox():
 
                 st.markdown(
                     "<div style='height:8px;'></div>"
-                    "<div style='color:#1B3A5F;font-weight:600;font-size:13px;margin-bottom:2px;'>"
+                    f"<div style='color:{TEXT_PRIMARY};font-weight:600;font-size:13px;margin-bottom:2px;'>"
                     "2. Take photo of check / remittance</div>",
                     unsafe_allow_html=True,
                 )
@@ -896,9 +952,9 @@ def render_inbox():
             with st.container(border=True):
                 badge = "&#10003;" if already else "&middot;"
                 st.markdown(
-                    f"<div style='color:{NAVY};font-weight:600;'>{badge} {fix['display_label']}</div>"
-                    f"<div style='color:#6F6655;font-size:12px;'>{fix['filename']}</div>"
-                    f"<div style='color:#2E2A20;font-size:13px;margin-top:4px;'>"
+                    f"<div style='color:{TEXT_PRIMARY};font-weight:600;'>{badge} {fix['display_label']}</div>"
+                    f"<div style='color:{TEXT_MUTED};font-size:12px;'>{fix['filename']}</div>"
+                    f"<div style='color:{TEXT_PRIMARY};font-size:13px;margin-top:4px;'>"
                     f"{fix['preview_snippet']}</div>",
                     unsafe_allow_html=True,
                 )
@@ -918,11 +974,11 @@ def render_inbox():
             row_badge = "&#10003;" if ingested else "&middot;"
             with st.container(border=True):
                 st.markdown(
-                    f"<div style='color:{NAVY};font-weight:600;'>"
+                    f"<div style='color:{TEXT_PRIMARY};font-weight:600;'>"
                     f"{row_badge} {source_badge} &middot; {rec['artifact_name']}</div>"
-                    f"<div style='color:#6F6655;font-size:12px;'>"
+                    f"<div style='color:{TEXT_MUTED};font-size:12px;'>"
                     f"{rec['size_kb']} KB &middot; {rec['uploaded_at']}</div>"
-                    f"<div style='color:#2E2A20;font-size:13px;margin-top:4px;'>"
+                    f"<div style='color:{TEXT_PRIMARY};font-size:13px;margin-top:4px;'>"
                     f"User-supplied artifact (demo: ingest will use a sample fixture).</div>",
                     unsafe_allow_html=True,
                 )
@@ -1055,7 +1111,7 @@ def render_dashboard():
         for _, row in fdf.iterrows():
             with st.container(border=True):
                 cols = st.columns([2, 1.3, 1, 1, 1, 0.8, 1, 0.8])
-                cols[0].markdown(f"<div style='color:{NAVY};font-weight:600;'>{row['customer']}</div>", unsafe_allow_html=True)
+                cols[0].markdown(f"<div style='color:{TEXT_PRIMARY};font-weight:600;'>{row['customer']}</div>", unsafe_allow_html=True)
                 cols[1].markdown(f"`{row['invoice_number']}`")
                 cols[2].markdown(
                     f"{'$' + format(row['invoiced'], ',.2f') if row['invoiced'] is not None else '—'}"
@@ -1071,7 +1127,7 @@ def render_dashboard():
                         f"{'-' if delta < 0 else '+'}${abs(delta):,.2f}</span>",
                         unsafe_allow_html=True,
                     )
-                cols[5].markdown(f"<span style='font-size:11px;color:#6F6655;'>{row['source']}</span>", unsafe_allow_html=True)
+                cols[5].markdown(f"<span style='font-size:11px;color:{TEXT_MUTED};'>{row['source']}</span>", unsafe_allow_html=True)
 
                 badges_html = f"<span class='badge b-{row['classification'].lower()}'>{row['classification']}</span>"
                 if row["flags"]:
@@ -1160,7 +1216,8 @@ def render_drilldown():
         for idx, mr in enumerate(payment["match_results"]):
             line = mr["line"]
             is_selected = idx == (st.session_state.selected_line_index or 0)
-            border_color = NAVY if is_selected else BORDER
+            border_color = TEXT_PRIMARY if is_selected else BORDER_LIGHT
+            border_width = "2px" if is_selected else "1px"
             inv_open = mr.get("open_balance_at_match")
             delta = mr.get("delta_amount") or Decimal("0")
 
@@ -1172,17 +1229,17 @@ def render_drilldown():
             cust_rec = _lookup_customer_record(payment, mr)
             am_name = cust_rec.get("account_manager_name", "")
             am_line = (
-                f"<div style='color:#6F6655;font-size:11px;margin-top:6px;'>"
+                f"<div style='color:{TEXT_MUTED};font-size:11px;margin-top:6px;'>"
                 f"<b>AM:</b> {am_name}</div>"
             ) if am_name else ""
 
             line_html = f"""
-            <div style='border:2px solid {border_color};border-radius:6px;padding:12px;margin-bottom:10px;background:#FFFFFF;'>
-                <div><b style='color:{NAVY};'>Invoice:</b> <code>{line.get('invoice_number','')}</code> &nbsp; {badges}</div>
+            <div style='border:{border_width} solid {border_color};border-radius:6px;padding:12px;margin-bottom:10px;background:#FFFFFF;'>
+                <div><b style='color:{TEXT_PRIMARY};'>Invoice:</b> <code>{line.get('invoice_number','')}</code> &nbsp; {badges}</div>
                 <div style='margin-top:4px;'><b>Line amount:</b> ${float(line.get('line_amount',0)):,.2f} &nbsp;|&nbsp;
                      <b>Open balance:</b> {'$' + format(float(inv_open),',.2f') if inv_open is not None else '—'} &nbsp;|&nbsp;
                      <b>Delta:</b> ${float(delta):,.2f}</div>
-                <div style='color:#6F6655;font-size:12px;margin-top:4px;'>{line.get('description','')}</div>
+                <div style='color:{TEXT_MUTED};font-size:12px;margin-top:4px;'>{line.get('description','')}</div>
                 {am_line}
             </div>
             """
@@ -1323,10 +1380,10 @@ def render_email_draft(payment: dict):
                 const el = document.getElementById('copy-toast');
                 if (el) {{ el.innerText = 'Clipboard blocked - use the textarea above'; el.style.display='inline'; }}
             }}
-        )" style="padding:8px 16px;border-radius:4px;border:1px solid {NAVY};background:{NAVY};color:{CREAM};font-weight:600;cursor:pointer;width:100%;font-family:'Inter',sans-serif;letter-spacing:0.3px;">
+        )" style="padding:8px 16px;border-radius:6px;border:1px solid {TEXT_PRIMARY};background:{TEXT_PRIMARY};color:#FFFFFF;font-weight:600;cursor:pointer;width:100%;font-family:'Inter',sans-serif;letter-spacing:0.2px;">
             Copy to clipboard
         </button>
-        <span id='copy-toast' style='display:none;margin-left:12px;color:{GREEN};font-weight:600;'></span>
+        <span id='copy-toast' style='display:none;margin-left:12px;color:{PILL_GREEN_TX};font-weight:600;'></span>
         """
         st.components.v1.html(copy_html, height=50)
     with cols[1]:
